@@ -16,8 +16,8 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
     /*
     Permet de générer un mouvement qui ne ressemble pas aux autres objets.
     */
-    self->randomStartingTickX = rand() % 1000;
-    self->randomStartingTickY = rand() % 1000;
+    self->randomStartingTickX = (float)(rand() % 1000);
+    self->randomStartingTickY = (float)(rand() % 1000);
 
     Assets *assets = Scene_GetAssets(self->scene);
     switch (type)
@@ -37,7 +37,7 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
         self->radius = 0.4f;
         self->texture = assets->fighter;
         self->remainingLives = 1;
-        self->timeBetweenBullets = 1.5;
+        self->timeBetweenBullets = 3;
         break;
 
     default:
@@ -56,17 +56,40 @@ void Enemy_Delete(Enemy *self)
 
 void Enemy_Update(Enemy *self)
 {
-    // Créé un projectil toutes les "timeBetweenBullets"   
+    //Créé un projectil toutes les "timeBetweenBullets"
     if ((g_time->currentTime - self->lastBulletTime) >= self->timeBetweenBullets) {
-        Vec2 velocity = Vec2_Set(-4.0, 0.0f);
-        Bullet* bullet = Bullet_New(
-            self->scene, self->position, velocity, BULLET_FIGHTER, 90.0f);
-        Scene_AppendBullet(self->scene, bullet);
+        /*
+        * Gère les projectils des ennemis
+        */
+        if (self->type == ENEMY_FIGHTER_1)
+        {
+            // Le projectile part tout droit
+            Vec2 velocity = Vec2_Set(-4.0, 0.0f);
+            Bullet* bullet = Bullet_New(
+                self->scene, self->position, velocity, BULLET_FIGHTER, 90.0f);
+            Scene_AppendBullet(self->scene, bullet);
 
+        }
+        else if (self->type == ENEMY_FIGHTER_2)
+        {
+            // Le projectile part en diagonale vers le haut
+            Vec2 velocity_1 = Vec2_Set(-3.0, 0.5f);
+            Bullet* bullet_1 = Bullet_New(
+                self->scene, self->position, velocity_1, BULLET_FIGHTER, 90.0f);
+            Scene_AppendBullet(self->scene, bullet_1);
+
+            // Le projectile part en diagonale vers le bas
+            Vec2 velocity_2 = Vec2_Set(-3.0, -0.5f);
+            Bullet* bullet_2 = Bullet_New(
+                self->scene, self->position, velocity_2, BULLET_FIGHTER, 90.0f);
+            Scene_AppendBullet(self->scene, bullet_2);
+        }
         self->lastBulletTime = g_time->currentTime;
-    }
+       }
 
-    // Gère le mouvements des ennemis
+    /*
+    Gère le mouvements des ennemis
+    */
     if (self->type == ENEMY_FIGHTER_1 || self->type == ENEMY_FIGHTER_2)
     {
         // Calcul de la vélocité en utilisant cos et sin pour faire bouger l'ennemi.

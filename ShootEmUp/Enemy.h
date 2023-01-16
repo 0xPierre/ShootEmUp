@@ -23,7 +23,8 @@ typedef enum EnemyState_e
 typedef enum EnemyType_e
 {
     /// @brief Ennemi simple.
-    ENEMY_FIGHTER,
+    ENEMY_FIGHTER_1,
+    ENEMY_FIGHTER_2,
 } EnemyType;
 
 /// @brief Structure représentant un ennemi.
@@ -69,6 +70,14 @@ typedef struct Enemy_s
     /// @brief Ecart de temps entre chaque projectil.
     /// Utilisé lorsque l'ennemi s'update.
     float lastBulletTime;
+
+    /// @brief Valeur aléatoire de départ de mouvement en X.
+    /// Utilisé pour éviter que les mouvements se ressemblent trop.
+    float randomStartingTickX;
+
+    /// @brief Valeur aléatoire de départ de mouvement en Y.
+    /// Utilisé pour éviter que les mouvements se ressemblent trop.
+    float randomStartingTickY;
 } Enemy;
 
 /// @brief Crée un nouvel ennemi.

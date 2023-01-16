@@ -13,16 +13,31 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
     self->state = ENEMY_FIRING;
     self->lastBulletTime = g_time->currentTime;
 
+    /*
+    Permet de générer un mouvement qui ne ressemble pas aux autres objets.
+    */
+    self->randomStartingTickX = rand() % 1000;
+    self->randomStartingTickY = rand() % 1000;
+
     Assets *assets = Scene_GetAssets(self->scene);
     switch (type)
     {
-    case ENEMY_FIGHTER:
+    case ENEMY_FIGHTER_1:
         self->worldW = 64 * PIX_TO_WORLD;
         self->worldH = 64 * PIX_TO_WORLD;
         self->radius = 0.4f;
         self->texture = assets->fighter;
-        self->remainingLives = 2; 
-        self->timeBetweenBullets = 3;
+        self->remainingLives = 1; 
+        self->timeBetweenBullets = 1.5;
+        break;
+
+    case ENEMY_FIGHTER_2:
+        self->worldW = 64 * PIX_TO_WORLD;
+        self->worldH = 64 * PIX_TO_WORLD;
+        self->radius = 0.4f;
+        self->texture = assets->fighter;
+        self->remainingLives = 1;
+        self->timeBetweenBullets = 1.5;
         break;
 
     default:
@@ -41,9 +56,7 @@ void Enemy_Delete(Enemy *self)
 
 void Enemy_Update(Enemy *self)
 {
-    /*
-    Créé un projectil toutes les "timeBetweenBullets"   
-    */
+    // Créé un projectil toutes les "timeBetweenBullets"   
     if ((g_time->currentTime - self->lastBulletTime) >= self->timeBetweenBullets) {
         Vec2 velocity = Vec2_Set(-4.0, 0.0f);
         Bullet* bullet = Bullet_New(
@@ -51,6 +64,23 @@ void Enemy_Update(Enemy *self)
         Scene_AppendBullet(self->scene, bullet);
 
         self->lastBulletTime = g_time->currentTime;
+    }
+
+    // Gère le mouvements des ennemis
+    if (self->type == ENEMY_FIGHTER_1 || self->type == ENEMY_FIGHTER_2)
+    {
+        // Calcul de la vélocité en utilisant cos et sin pour faire bouger l'ennemi.
+        float Xvelocity = sinf(g_time->currentTime + self->randomStartingTickX) / 3;
+        float YVelocity = cosf(g_time->currentTime + self->randomStartingTickY) / 2;
+
+        Vec2 velocity = Vec2_Set(
+            Xvelocity,
+            YVelocity
+        );
+        self->position = Vec2_Add(
+            self->position,
+            Vec2_Scale(velocity, Timer_GetDelta(g_time))
+        );
     }
 }
 

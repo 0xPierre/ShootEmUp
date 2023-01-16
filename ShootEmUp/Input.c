@@ -41,22 +41,22 @@ void Input_Update(Input *self)
 
             case SDL_SCANCODE_RIGHT:
                 // Deplacement à droite
-                self->hAxis = 1.f;
+                self->hAxis = 3.f;
                 break;
 
             case SDL_SCANCODE_LEFT:
                 // Deplacement à gauche
-                self->hAxis = -1.f;
+                self->hAxis = -3.f;
                 break;
 
             case SDL_SCANCODE_UP:
                 // Deplacement en haut
-                self->vAxis = 1.f;
+                self->vAxis = 3.f;
                 break;
 
             case SDL_SCANCODE_DOWN:
                 // Deplacement en bas
-                self->vAxis = -1.f;
+                self->vAxis = -3.f;
                 break;
 
             case SDL_SCANCODE_SPACE:

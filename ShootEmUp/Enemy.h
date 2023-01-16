@@ -57,6 +57,18 @@ typedef struct Enemy_s
     /// @brief Rayon de l'ennemi exprimé dans le référentiel monde.
     /// Il est utilisé dans le moteur physique pour tester les collisions.
     float radius;
+
+    /// @brief Nombre de vie restant de l'ennemi.
+    /// Utilisé lorsque l'ennemi se prends un projectil.
+    int remainingLives;
+
+    /// @brief Ecart de temps entre chaque projectil.
+    /// Utilisé lorsque l'ennemi s'update.
+    float timeBetweenBullets;
+
+    /// @brief Ecart de temps entre chaque projectil.
+    /// Utilisé lorsque l'ennemi s'update.
+    float lastBulletTime;
 } Enemy;
 
 /// @brief Crée un nouvel ennemi.

@@ -11,6 +11,7 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
     self->position = position;
     self->type = type;
     self->state = ENEMY_FIRING;
+    self->lastBulletTime = g_time->currentTime;
 
     Assets *assets = Scene_GetAssets(self->scene);
     switch (type)
@@ -20,6 +21,8 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
         self->worldH = 64 * PIX_TO_WORLD;
         self->radius = 0.4f;
         self->texture = assets->fighter;
+        self->remainingLives = 2; 
+        self->timeBetweenBullets = 3;
         break;
 
     default:
@@ -38,7 +41,17 @@ void Enemy_Delete(Enemy *self)
 
 void Enemy_Update(Enemy *self)
 {
-    
+    /*
+    Créé un projectil toutes les "timeBetweenBullets"   
+    */
+    if ((g_time->currentTime - self->lastBulletTime) >= self->timeBetweenBullets) {
+        Vec2 velocity = Vec2_Set(-4.0, 0.0f);
+        Bullet* bullet = Bullet_New(
+            self->scene, self->position, velocity, BULLET_FIGHTER, 90.0f);
+        Scene_AppendBullet(self->scene, bullet);
+
+        self->lastBulletTime = g_time->currentTime;
+    }
 }
 
 void Enemy_Render(Enemy *self)
@@ -66,5 +79,9 @@ void Enemy_Render(Enemy *self)
 
 void Enemy_Damage(Enemy *self, int damage)
 {
-    
+    self->remainingLives--;
+
+    if (self->remainingLives == 0) {
+        self->state = ENEMY_DEAD;
+    }
 }

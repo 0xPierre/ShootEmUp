@@ -50,7 +50,7 @@ void Bullet_Update(Bullet *self)
     Scene* scene = self->scene;
     Input* input = Scene_GetInput(scene);
     // Mise à jour de la vitesse en fonction de l'état des touches
-    Vec2 velocity = Vec2_Set(3, 0);
+    Vec2 velocity = self->velocity;
     // Mise à jour de la position
     self->position = Vec2_Add( // Nouvelle pos. = ancienne pos. +
         self->position, // (vitesse * temps écoulé)

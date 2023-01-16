@@ -46,7 +46,15 @@ void Bullet_Delete(Bullet *self)
 
 void Bullet_Update(Bullet *self)
 {
-    // On récupère de;
+    // On récupère des infos essentielles (communes à tout objet)
+    Scene* scene = self->scene;
+    Input* input = Scene_GetInput(scene);
+    // Mise à jour de la vitesse en fonction de l'état des touches
+    Vec2 velocity = Vec2_Set(3, 0);
+    // Mise à jour de la position
+    self->position = Vec2_Add( // Nouvelle pos. = ancienne pos. +
+        self->position, // (vitesse * temps écoulé)
+        Vec2_Scale(velocity, Timer_GetDelta(g_time)));
 }
 
 void Bullet_Render(Bullet *self)

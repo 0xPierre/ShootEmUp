@@ -40,7 +40,6 @@ void Player_Update(Player *self)
         Bullet* bullet = Bullet_New(
             self->scene, self->position, velocity, BULLET_PLAYER, 90.0f);
         Scene_AppendBullet(self->scene, bullet);
-        printf("shoot\n");
     }
 }
 

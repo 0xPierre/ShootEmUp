@@ -13,6 +13,7 @@ Player *Player_New(Scene *scene)
     self->position = Vec2_Set(1.0f, 4.5f);
     self->radius = 0.25f;
     self->texture = assets->player;
+    self->remainingLives = 2;
 
     return self;
 }
@@ -34,6 +35,16 @@ void Player_Update(Player *self)
     self->position = Vec2_Add( // Nouvelle pos. = ancienne pos. +
         self->position, // (vitesse * temps écoulé)
         Vec2_Scale(velocity, Timer_GetDelta(g_time)));
+      
+    // On attends que l'animation de mort du joueur soit passé pour passé son état en PLAYER_DEAD
+    if (self->state == PLAYER_DYING)
+    {
+        if (g_time->currentTime - self->isDyingSince >= 1)
+        {
+            self->state = PLAYER_DEAD;
+            printf("Player is DEAD\n");
+        }
+    }
 
     if (input->shootPressed) {
         Vec2 velocity = Vec2_Set(4.0f, 0.0f);
@@ -68,5 +79,10 @@ void Player_Render(Player *self)
 
 void Player_Damage(Player *self, int damage)
 {
-    printf("Le potooship a mal\n");
+    self->remainingLives--;
+    if (self->remainingLives == 0)
+    {
+        self->state = PLAYER_DYING;
+        self->isDyingSince = g_time->currentTime;
+    }
 }

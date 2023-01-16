@@ -38,6 +38,12 @@ typedef struct Player_s
     /// @brief Rayon du joueur exprimé dans le référentiel monde.
     /// Il est utilisé dans le moteur physique pour tester les collisions.
     float radius;
+
+    /// @brief Nombre de vies restantes du joueur
+    int remainingLives;
+
+    /// @brief Nombre de temps depuis le début de l'animation de mort
+    float isDyingSince;
 } Player;
 
 /// @brief Crée un nouveau joueur.

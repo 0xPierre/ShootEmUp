@@ -199,7 +199,8 @@ void Scene_Render(Scene *self)
     Assets *assets = Scene_GetAssets(self);
     SDL_RenderCopy(renderer, assets->layers[0], NULL, NULL);
     SDL_RenderCopy(renderer, assets->layers[1], NULL, NULL);
-    
+    SDL_RenderCopy(renderer, assets->layers[2], NULL, NULL);
+
     // On affiche le jeu seulement quand la partie a commencé
     if (self->isGameStarted)
     {

@@ -35,8 +35,9 @@ Assets *Assets_New(SDL_Renderer *renderer)
     // Chargement des textures
 
     TextureSpec texSpecs[] = {
-        { &self->layers[0],     "../Assets/Background/layer_01.png"   },
-        { &self->layers[1],     "../Assets/Background/layer_02.png"   },
+        { &self->layers[0],     "../Assets/Background/bg1.png"   },
+        { &self->layers[1],     "../Assets/Background/bg2.png"   },
+        { &self->layers[2],     "../Assets/Background/bg3.png"   },
         { &self->playerBullet,  "../Assets/Player/bullet_default.png" },
         { &self->fighter1,       "../Assets/Enemy/Enemy1.png"         },
         { &self->fighter2,       "../Assets/Enemy/Enemy2.png"         },
@@ -85,6 +86,7 @@ void Assets_Delete(Assets *self)
     SDL_Texture **texPointers[] = {
         &self->layers[0],
         &self->layers[1],
+        &self->layers[2],
         &self->playerBullet,
         &self->fighter1,
         & self->fighter2,

@@ -7,7 +7,7 @@
 typedef struct Assets_s
 {
     /// @brief Tableau des différents calques de fond.
-    SDL_Texture *layers[2];
+    SDL_Texture *layers[3];
 
     /// @brief Texture du vaisseau du joueur.
     SDL_Texture *player;

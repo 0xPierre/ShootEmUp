@@ -12,6 +12,8 @@ Scene *Scene_New(SDL_Renderer *renderer)
     self->input = Input_New();
     self->player = Player_New(self);
     self->waveIdx = 0;
+    self->isMenuOpen = 1;
+    self->isGameStarted = 0;
 
     return self;
 }

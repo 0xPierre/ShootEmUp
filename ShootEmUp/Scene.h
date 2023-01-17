@@ -49,6 +49,14 @@ typedef struct Scene_s
     /// @brief Indice de la vague d'ennemis courrante.
     /// Utilisé pour implémenter un niveau complet.
     int waveIdx;
+
+    /// @brief état du menu
+    /// Utilisé pour afficher ou virer le menu
+    int isMenuOpen;
+
+    /// @brief Permet de savoir si le joueur était en jeu
+    /// Utilisé pour savoir si afficher Jouer ou Reprendre
+    int isGameStarted;
 } Scene;
 
 /// @brief Crée la scène principale du jeu.

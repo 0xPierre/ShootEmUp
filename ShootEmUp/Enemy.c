@@ -95,6 +95,8 @@ void Enemy_Update(Enemy *self)
         }
 
         self->lastBulletTime = g_time->currentTime;
+
+        Mix_PlayChannel(-1, self->scene->assets->EnemyBulletSound1, 0);
        }
 
     /*

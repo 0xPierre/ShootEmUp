@@ -12,6 +12,26 @@ Assets *Assets_New(SDL_Renderer *renderer)
     AssertNew(self);
 
     // -------------------------------------------------------------------------
+    // Chargement des audios/musics
+    self->backgroundMusic = NULL;
+    self->backgroundMusic = Mix_LoadMUS("../Assets/Audio/Shoot Em Up EXPERIENCE - GAME SOUNDTRACK.mp3");
+    if (self->backgroundMusic == NULL)
+    {
+        printf("Failed to load music! SDL_mixer Error: %s\n", Mix_GetError());
+        assert(false);
+        abort();
+    } 
+    else
+    {
+        Mix_PlayMusic(self->backgroundMusic, -1);
+    }
+    self->PlayerBulletSound = NULL;
+    self->PlayerBulletSound = Mix_LoadWAV("../Assets/Audio/PlayerShoot.wav");
+
+    self->EnemyBulletSound1 = NULL;
+    self->EnemyBulletSound1 = Mix_LoadWAV("../Assets/Audio/EnergyGun_Shoot1A.wav");
+
+    // -------------------------------------------------------------------------
     // Chargement des textures
 
     TextureSpec texSpecs[] = {
@@ -47,6 +67,11 @@ void Assets_Delete(Assets *self)
     if (!self) return;
 
     // -------------------------------------------------------------------------
+    // Libère les audios/musics
+    Mix_FreeChunk(self->backgroundMusic);
+    self->backgroundMusic = NULL;
+
+    // -------------------------------------------------------------------------
     // Libère les textures
 
     SDL_Texture **texPointers[] = {
@@ -64,6 +89,8 @@ void Assets_Delete(Assets *self)
         if (*texPointers[i])
             SDL_DestroyTexture(*(texPointers[i]));
     }
+
+
 
     free(self);
 }

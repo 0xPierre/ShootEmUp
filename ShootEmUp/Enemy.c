@@ -40,6 +40,15 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
         self->timeBetweenBullets = 3;
         break;
 
+    case ENEMY_FIGHTER_3:
+        self->worldW = 64 * PIX_TO_WORLD;
+        self->worldH = 64 * PIX_TO_WORLD;
+        self->radius = 0.4f;
+        self->texture = assets->fighter;
+        self->remainingLives = 1;
+        self->timeBetweenBullets = 1;
+        break;
+
     default:
         assert(false);
         break;
@@ -59,9 +68,9 @@ void Enemy_Update(Enemy *self)
     //Créé un projectil toutes les "timeBetweenBullets"
     if ((g_time->currentTime - self->lastBulletTime) >= self->timeBetweenBullets) {
         /*
-        * Gère les projectils des ennemis
+        * Gère les projectiles des ennemis
         */
-        if (self->type == ENEMY_FIGHTER_1)
+        if (self->type == ENEMY_FIGHTER_1 || self->type == ENEMY_FIGHTER_3)
         {
             // Le projectile part tout droit
             Vec2 velocity = Vec2_Set(-4.0, 0.0f);
@@ -84,6 +93,7 @@ void Enemy_Update(Enemy *self)
                 self->scene, self->position, velocity_2, BULLET_FIGHTER, 90.0f);
             Scene_AppendBullet(self->scene, bullet_2);
         }
+
         self->lastBulletTime = g_time->currentTime;
        }
 
@@ -92,6 +102,9 @@ void Enemy_Update(Enemy *self)
     */
     if (self->type == ENEMY_FIGHTER_1 || self->type == ENEMY_FIGHTER_2)
     {
+        /*
+        * Mouvement permettant de rester sur place mais de simuler un petit déplacement.
+        */
         // Calcul de la vélocité en utilisant cos et sin pour faire bouger l'ennemi.
         float Xvelocity = sinf(g_time->currentTime + self->randomStartingTickX) / 3;
         float YVelocity = cosf(g_time->currentTime + self->randomStartingTickY) / 2;
@@ -99,6 +112,22 @@ void Enemy_Update(Enemy *self)
         Vec2 velocity = Vec2_Set(
             Xvelocity,
             YVelocity
+        );
+        self->position = Vec2_Add(
+            self->position,
+            Vec2_Scale(velocity, Timer_GetDelta(g_time))
+        );
+    }
+    else if (self->type == ENEMY_FIGHTER_3)
+    {
+        /*
+        * Mouvement de type sinusoidale ( lineaire sur l'axe Y).
+        */
+        float sinPos = sinf(g_time->currentTime + self->randomStartingTickY) * 2;
+
+        Vec2 velocity = Vec2_Set(
+            0,
+            sinPos
         );
         self->position = Vec2_Add(
             self->position,

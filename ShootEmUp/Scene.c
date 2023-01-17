@@ -60,6 +60,16 @@ void Scene_UpdateLevel(Scene *self)
 
         self->waveIdx++;
     }
+    else if (self->waveIdx == 2)
+    {
+        Enemy* enemy_1 = Enemy_New(self, ENEMY_FIGHTER_3, Vec2_Set(13.0f, 7.0f));
+        Scene_AppendEnemy(self, enemy_1);
+
+        Enemy* enemy_2 = Enemy_New(self, ENEMY_FIGHTER_3, Vec2_Set(14.0f, 4.0f));
+        Scene_AppendEnemy(self, enemy_2);
+
+        self->waveIdx++;
+    }
 }
 
 bool Scene_Update(Scene *self)

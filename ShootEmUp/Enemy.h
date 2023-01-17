@@ -25,6 +25,7 @@ typedef enum EnemyType_e
     /// @brief Ennemi simple.
     ENEMY_FIGHTER_1,
     ENEMY_FIGHTER_2,
+    ENEMY_FIGHTER_3,
 } EnemyType;
 
 /// @brief Structure représentant un ennemi.

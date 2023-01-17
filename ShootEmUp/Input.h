@@ -5,8 +5,11 @@
 /// @brief Structure représentant un gestionnaire des entrées utilisateur.
 typedef struct Input_s
 {
-    /// @brief Booléen indiquant si le bouton "quitter" vient d'être pressé.
+    /// @brief Booléen indiquant si le bouton "quitter" (croix en haut à droite) vient d'être pressé.
     bool quitPressed;
+
+    /// @brief Boolean indiquant si la touche echap a été pressé
+    bool escPressed;
 
     /// @brief Booléen indiquant si la touche de tir vient d'être pressée.
     bool shootPressed;

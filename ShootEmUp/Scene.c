@@ -13,7 +13,10 @@ Scene *Scene_New(SDL_Renderer *renderer)
     self->player = Player_New(self);
     self->waveIdx = 0;
     self->isMenuOpen = 1;
-    self->isGameStarted = 0;
+    self->isGameStarted = 1;
+
+    self->cursor_default = SDL_GetCursor();
+    self->cursor_pointer = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND);
 
     return self;
 }
@@ -81,9 +84,13 @@ bool Scene_Update(Scene *self)
     // Met à jour les entrées utilisateur
     Input_Update(self->input);
 
+    // Mets à jours les éléments seulement quand le menu n'est pas fermé
+    if (self->isMenuOpen)
+    {
+        return self->input->quitPressed;
+    }
     // -------------------------------------------------------------------------
     // Met à jour les tirs
-
     int i = 0;
     while (i < self->bulletCount)
     {
@@ -147,13 +154,13 @@ bool Scene_Update(Scene *self)
         }
     }
 
-    // -------------------------------------------------------------------------
-    // Met à jour les ennemis
+// -------------------------------------------------------------------------
+// Met à jour les ennemis
 
     i = 0;
     while (i < self->enemyCount)
     {
-        Enemy *enemy = self->enemies[i];
+        Enemy* enemy = self->enemies[i];
         bool removed = false;
 
         Enemy_Update(enemy);
@@ -192,23 +199,53 @@ void Scene_Render(Scene *self)
     Assets *assets = Scene_GetAssets(self);
     SDL_RenderCopy(renderer, assets->layers[0], NULL, NULL);
     SDL_RenderCopy(renderer, assets->layers[1], NULL, NULL);
-
-    // Affichage des bullets
-    int bulletCount = self->bulletCount;
-    for (int i = 0; i < bulletCount; i++)
+    
+    // On affiche le jeu seulement quand la partie a commencé
+    if (self->isGameStarted)
     {
-        Bullet_Render(self->bullets[i]);
+        // Affichage des bullets
+        int bulletCount = self->bulletCount;
+        for (int i = 0; i < bulletCount; i++)
+        {
+            Bullet_Render(self->bullets[i]);
+        }
+
+        // Affichage des ennemis
+        int enemyCount = self->enemyCount;
+        for (int i = 0; i < enemyCount; i++)
+        {
+            Enemy_Render(self->enemies[i]);
+        }
+
+        // Affichage du joueur
+        Player_Render(self->player);
     }
 
-    // Affichage des ennemis
-    int enemyCount = self->enemyCount;
-    for (int i = 0; i < enemyCount; i++)
-    {
-        Enemy_Render(self->enemies[i]);
+    // Permet de toggle le menu avec echap seulement quand la partie a débuté
+    if (self->input->escPressed && self->isGameStarted) {
+        self->isMenuOpen = !self->isMenuOpen;
     }
 
-    // Affichage du joueur
-    Player_Render(self->player);
+    // Affichage du menu
+    if (self->isMenuOpen)
+    {
+        // Affichage du bouton Jouer
+        int MenuStartWidth = 150;
+        int MenuStartHeight = MenuStartWidth;
+        SDL_Rect MenuStart;
+        MenuStart.x = WINDOW_WIDTH / 2 - MenuStartWidth / 2;
+        MenuStart.y = WINDOW_HEIGHT / 4 - MenuStartHeight / 2;
+        MenuStart.w = MenuStartWidth;
+        MenuStart.h = MenuStartHeight;
+        SDL_RenderCopy(renderer, self->assets->MenuStart, NULL, &MenuStart);
+        changeCursor(
+            MenuStart.x,
+            MenuStart.y,
+            MenuStart.w,
+            MenuStart.h,
+            self
+        );
+    }
 }
 
 void Scene_AppendObject(void *object, void **objectArray, int *count, int capacity)
@@ -282,4 +319,19 @@ void Scene_RemoveBullet(Scene *self, int index)
 {
     Bullet_Delete(self->bullets[index]);
     Scene_RemoveObject(index, (void **)(self->bullets), &(self->bulletCount));
+}
+
+void changeCursor(int x, int y, int w, int h, Scene* scene)
+{
+    int mouseX, mouseY;
+    SDL_GetMouseState(&mouseX, &mouseY);
+
+    if (mouseX >= x && mouseX <= x + w && mouseY >= y && mouseY <= y + h)
+    {
+        SDL_SetCursor(scene->cursor_pointer);
+        ;
+    }
+    else {
+        SDL_SetCursor(scene->cursor_default);
+    }
 }

@@ -28,6 +28,10 @@ typedef struct Assets_s
 
     Mix_Chunk* PlayerBulletSound;
     Mix_Chunk* EnemyBulletSound1;
+
+    SDL_Texture* MenuRestart;
+    SDL_Texture* MenuStart;
+    SDL_Texture* MenuQuit;
 } Assets;
 
 /// @brief Crée la structure contenant les assets du jeu.

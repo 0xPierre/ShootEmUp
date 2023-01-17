@@ -1,5 +1,7 @@
 #include "Input.h"
 #include "Common.h"
+#include "Scene.h"
+
 
 Input *Input_New()
 {
@@ -17,6 +19,7 @@ void Input_Delete(Input *self)
 
 void Input_Update(Input *self)
 {
+    self->escPressed = false;
     self->quitPressed = false;
     self->shootPressed = false;
 
@@ -36,7 +39,7 @@ void Input_Update(Input *self)
             switch (evt.key.keysym.scancode)
             {
             case SDL_SCANCODE_ESCAPE:
-                self->quitPressed = true;
+                self->escPressed = true;
                 break;
 
             case SDL_SCANCODE_RIGHT:
@@ -102,6 +105,14 @@ void Input_Update(Input *self)
             default:
                 break;
             }
+            break;
+
+        case SDL_MOUSEBUTTONDOWN: {
+            int mouseX = evt.button.x;
+            int mouseY = evt.button.y;
+
+            printf("%d %d\n", mouseX, mouseY);
+        }
             break;
         }
     }

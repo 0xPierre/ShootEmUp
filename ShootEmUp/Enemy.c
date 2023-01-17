@@ -23,28 +23,28 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
     switch (type)
     {
     case ENEMY_FIGHTER_1:
-        self->worldW = 64 * PIX_TO_WORLD;
-        self->worldH = 64 * PIX_TO_WORLD;
+        self->worldW = 120 * PIX_TO_WORLD;
+        self->worldH = 120 * PIX_TO_WORLD;
         self->radius = 0.4f;
-        self->texture = assets->fighter;
+        self->texture = assets->fighter1;
         self->remainingLives = 1; 
         self->timeBetweenBullets = 1.5;
         break;
 
     case ENEMY_FIGHTER_2:
-        self->worldW = 64 * PIX_TO_WORLD;
-        self->worldH = 64 * PIX_TO_WORLD;
+        self->worldW = 120 * PIX_TO_WORLD;
+        self->worldH = 120 * PIX_TO_WORLD;
         self->radius = 0.4f;
-        self->texture = assets->fighter;
+        self->texture = assets->fighter2;
         self->remainingLives = 1;
         self->timeBetweenBullets = 3;
         break;
 
     case ENEMY_FIGHTER_3:
-        self->worldW = 64 * PIX_TO_WORLD;
-        self->worldH = 64 * PIX_TO_WORLD;
+        self->worldW = 120 * PIX_TO_WORLD;
+        self->worldH = 120 * PIX_TO_WORLD;
         self->radius = 0.4f;
-        self->texture = assets->fighter;
+        self->texture = assets->fighter3;
         self->remainingLives = 1;
         self->timeBetweenBullets = 1;
         break;

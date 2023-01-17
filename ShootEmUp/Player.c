@@ -31,8 +31,8 @@ void Player_Update(Player *self)
     Input* input = Scene_GetInput(scene);
     // Mise à jour de la vitesse en fonction de l'état des touches
     Vec2 velocity = Vec2_Set(input->hAxis, input->vAxis);
-    // Mise à jour de la position
-    if ( self->position.x+input->hAxis   < 20 && self->position.x+input->hAxis > -4 && self->position.y+input->vAxis < 13 && self->position.y+input->vAxis > -4 )
+    // Mise à jour de la position, on fait attention a ne pas sortir du jeu.
+    if ( self->position.x+input->hAxis   < 19.5 && self->position.x+input->hAxis > -3.67 && self->position.y+input->vAxis < 12.5 && self->position.y+input->vAxis > -3.5 )
     { 
             self->position = Vec2_Add( // Nouvelle pos. = ancienne pos. +
             self->position, // (vitesse * temps écoulé)
@@ -73,8 +73,8 @@ void Player_Render(Player *self)
     float scale = Camera_GetWorldToViewScale(camera);
     SDL_FRect dst = { 0 };
     // Changez 48 par une autre valeur pour grossir ou réduire l'objet
-    dst.h = 48 * PIX_TO_WORLD * scale;
-    dst.w = 48 * PIX_TO_WORLD * scale;
+    dst.h = 120 * PIX_TO_WORLD * scale;
+    dst.w = 120 * PIX_TO_WORLD * scale;
     Camera_WorldToView(camera, self->position, &dst.x, &dst.y);
     // Le point de référence est le centre de l'objet
     dst.x -= 0.50f * dst.w;

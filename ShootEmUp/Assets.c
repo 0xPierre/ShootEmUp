@@ -38,9 +38,11 @@ Assets *Assets_New(SDL_Renderer *renderer)
         { &self->layers[0],     "../Assets/Background/layer_01.png"   },
         { &self->layers[1],     "../Assets/Background/layer_02.png"   },
         { &self->playerBullet,  "../Assets/Player/bullet_default.png" },
-        { &self->fighter,       "../Assets/Enemy/fighter.png"         },
+        { &self->fighter1,       "../Assets/Enemy/Enemy1.png"         },
+        { &self->fighter2,       "../Assets/Enemy/Enemy2.png"         },
+        { &self->fighter3,       "../Assets/Enemy/Enemy3.png"         },
         { &self->fighterBullet, "../Assets/Enemy/fighter_bullet.png"  },
-        { &self->player, "../Assets/Player/player.png"},
+        { &self->player, "../Assets/Player/P-red-a.png"},
     };
     int texSpecCount = sizeof(texSpecs) / sizeof(TextureSpec);
 
@@ -78,7 +80,9 @@ void Assets_Delete(Assets *self)
         &self->layers[0],
         &self->layers[1],
         &self->playerBullet,
-        &self->fighter,
+        &self->fighter1,
+        & self->fighter2,
+        & self->fighter3,
         &self->fighterBullet,
         &self->player,
     };

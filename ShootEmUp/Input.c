@@ -3,10 +3,12 @@
 #include "Scene.h"
 
 
-Input *Input_New()
+Input *Input_New(Scene *scene)
 {
     Input *self = (Input *)calloc(1, sizeof(Input));
     AssertNew(self);
+
+    self->scene = scene;
 
     return self;
 }
@@ -107,11 +109,13 @@ void Input_Update(Input *self)
             }
             break;
 
-        case SDL_MOUSEBUTTONDOWN: {
+        case SDL_MOUSEBUTTONUP: {
             int mouseX = evt.button.x;
             int mouseY = evt.button.y;
 
             printf("%d %d\n", mouseX, mouseY);
+
+            mouseClickActionIntersectionMenu(mouseX, mouseY, self->scene);
         }
             break;
         }

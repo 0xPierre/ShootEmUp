@@ -9,6 +9,7 @@
 #include "Bullet.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Menu.h"
 
 // Nombre maximal d'ennemis actifs dans un niveau.
 #define ENEMY_CAPACITY 32
@@ -50,17 +51,12 @@ typedef struct Scene_s
     /// Utilisé pour implémenter un niveau complet.
     int waveIdx;
 
-    /// @brief état du menu
-    /// Utilisé pour afficher ou virer le menu
-    int isMenuOpen;
-
     /// @brief Permet de savoir si le joueur était en jeu
     /// Utilisé pour savoir si afficher Jouer ou Reprendre
-    int isGameStarted;
 
-    ///@brief Stocke le curseur par défault du joueur
-    SDL_Cursor* cursor_default;
-    SDL_Cursor* cursor_pointer;
+    /// @brief Menu principal
+    int isGameStarted;
+    Menu* menu;
 } Scene;
 
 /// @brief Crée la scène principale du jeu.
@@ -133,7 +129,3 @@ INLINE Input *Scene_GetInput(Scene *self)
 {
     return self->input;
 }
-
-/// @brief Change le curseur en curseur main lorsqu'il se trouve sur la zone demandé
-/// @param x et y les coords, w et h la taille et scene la scene du monde.
-void changeCursor(int x, int y, int w, int h, Scene* scene);

@@ -1,10 +1,12 @@
 #pragma once
 
 #include "Settings.h"
+typedef struct Scene_s Scene;
 
 /// @brief Structure représentant un gestionnaire des entrées utilisateur.
 typedef struct Input_s
 {
+    Scene* scene;
     /// @brief Booléen indiquant si le bouton "quitter" (croix en haut à droite) vient d'être pressé.
     bool quitPressed;
 

@@ -141,6 +141,7 @@
     <ClCompile Include="Input.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="Math.c" />
+    <ClCompile Include="Menu.c" />
     <ClCompile Include="Player.c" />
     <ClCompile Include="Scene.c" />
     <ClCompile Include="Timer.c" />
@@ -153,6 +154,7 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Math.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Settings.h" />

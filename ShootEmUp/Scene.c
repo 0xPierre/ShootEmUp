@@ -9,14 +9,11 @@ Scene *Scene_New(SDL_Renderer *renderer)
 
     self->assets = Assets_New(renderer);
     self->camera = Camera_New(LOGICAL_WIDTH, LOGICAL_HEIGHT);
-    self->input = Input_New();
+    self->input = Input_New(self);
     self->player = Player_New(self);
     self->waveIdx = 0;
-    self->isMenuOpen = 1;
     self->isGameStarted = 1;
-
-    self->cursor_default = SDL_GetCursor();
-    self->cursor_pointer = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND);
+    self->menu = Menu_New(self);
 
     return self;
 }
@@ -29,6 +26,7 @@ void Scene_Delete(Scene *self)
     Camera_Delete(self->camera);
     Input_Delete(self->input);
     Player_Delete(self->player);
+    Menu_Delete(self->menu);
 
     for (int i = 0; i < self->enemyCount; i++)
     {
@@ -85,7 +83,7 @@ bool Scene_Update(Scene *self)
     Input_Update(self->input);
 
     // Mets à jours les éléments seulement quand le menu n'est pas fermé
-    if (self->isMenuOpen)
+    if (self->menu->isOpen)
     {
         return self->input->quitPressed;
     }
@@ -222,31 +220,7 @@ void Scene_Render(Scene *self)
         Player_Render(self->player);
     }
 
-    // Permet de toggle le menu avec echap seulement quand la partie a débuté
-    if (self->input->escPressed && self->isGameStarted) {
-        self->isMenuOpen = !self->isMenuOpen;
-    }
-
-    // Affichage du menu
-    if (self->isMenuOpen)
-    {
-        // Affichage du bouton Jouer
-        int MenuStartWidth = 150;
-        int MenuStartHeight = MenuStartWidth;
-        SDL_Rect MenuStart;
-        MenuStart.x = WINDOW_WIDTH / 2 - MenuStartWidth / 2;
-        MenuStart.y = WINDOW_HEIGHT / 4 - MenuStartHeight / 2;
-        MenuStart.w = MenuStartWidth;
-        MenuStart.h = MenuStartHeight;
-        SDL_RenderCopy(renderer, self->assets->MenuStart, NULL, &MenuStart);
-        changeCursor(
-            MenuStart.x,
-            MenuStart.y,
-            MenuStart.w,
-            MenuStart.h,
-            self
-        );
-    }
+    Menu_Render(self->menu);
 }
 
 void Scene_AppendObject(void *object, void **objectArray, int *count, int capacity)
@@ -320,19 +294,4 @@ void Scene_RemoveBullet(Scene *self, int index)
 {
     Bullet_Delete(self->bullets[index]);
     Scene_RemoveObject(index, (void **)(self->bullets), &(self->bulletCount));
-}
-
-void changeCursor(int x, int y, int w, int h, Scene* scene)
-{
-    int mouseX, mouseY;
-    SDL_GetMouseState(&mouseX, &mouseY);
-
-    if (mouseX >= x && mouseX <= x + w && mouseY >= y && mouseY <= y + h)
-    {
-        SDL_SetCursor(scene->cursor_pointer);
-        ;
-    }
-    else {
-        SDL_SetCursor(scene->cursor_default);
-    }
 }

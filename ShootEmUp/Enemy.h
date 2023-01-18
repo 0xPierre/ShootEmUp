@@ -16,7 +16,7 @@ typedef enum EnemyState_e
 
     /// @brief Etat d'un ennemi quand il est mort et que son animation de
     /// destruction est terminée.
-    ENEMY_DEAD,
+    ENEMY_DEAD
 } EnemyState;
 
 /// @brief Enumération des types possibles pour un ennemi.
@@ -26,7 +26,7 @@ typedef enum EnemyType_e
     ENEMY_FIGHTER_1,
     ENEMY_FIGHTER_2,
     ENEMY_FIGHTER_3,
-    ENEMY_FIGHTER_4,
+    ENEMY_FIGHTER_4
 } EnemyType;
 
 /// @brief Structure représentant un ennemi.

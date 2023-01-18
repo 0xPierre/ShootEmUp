@@ -53,7 +53,7 @@ void Player_Update(Player *self)
     }
 
     if (input->shootPressed) {
-        Vec2 velocity = Vec2_Set(4.0f, 0.0f);
+        Vec2 velocity = Vec2_Set(7.0f, 0.0f);
         Bullet* bullet = Bullet_New(
             self->scene, self->position, velocity, BULLET_PLAYER, 90.0f);
         Scene_AppendBullet(self->scene, bullet);

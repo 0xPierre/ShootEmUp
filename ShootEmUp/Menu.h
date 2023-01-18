@@ -13,10 +13,6 @@ typedef struct Menu_s
     /// Utilisé pour afficher ou virer le menu
     int isOpen;
 
-    /// @brief Permet de savoir si le joueur était en jeu
-    /// Utilisé pour savoir si afficher Jouer ou Reprendre
-    int isGameStarted;
-
     SDL_Rect MenuStart;
     SDL_Rect MenuQuit;
 

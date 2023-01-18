@@ -128,8 +128,6 @@ void changeCursor(Menu* self)
 
 void mouseClickActionIntersectionMenu(int mouseX, int mouseY, Menu *self)
 {
-    printf("hey %d %d %d %d %d %d\n", self->MenuStart.x, self->MenuStart.y, self->MenuStart.w, self->MenuStart.h, mouseX, mouseY);
-    // Bouton démarrage
     if (isInsideRect(
         self->MenuStart.x,
         self->MenuStart.y,
@@ -138,6 +136,18 @@ void mouseClickActionIntersectionMenu(int mouseX, int mouseY, Menu *self)
         mouseX,
         mouseY
     )) {
-        printf("Starting Game");
+        self->scene->menu->isOpen = false;
+        self->scene->isGameStarted = true;
+    }
+
+    else if (isInsideRect(
+        self->MenuQuit.x,
+        self->MenuQuit.y,
+        self->MenuQuit.w,
+        self->MenuQuit.h,
+        mouseX,
+        mouseY
+    )) {
+        self->scene->input->quitPressed = true;
     }
 }

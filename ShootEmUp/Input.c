@@ -113,9 +113,7 @@ void Input_Update(Input *self)
             int mouseX = evt.button.x;
             int mouseY = evt.button.y;
 
-            printf("%d %d\n", mouseX, mouseY);
-
-            mouseClickActionIntersectionMenu(mouseX, mouseY, self->scene);
+            mouseClickActionIntersectionMenu(mouseX, mouseY, self->scene->menu);
         }
             break;
         }

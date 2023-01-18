@@ -53,9 +53,9 @@ typedef struct Scene_s
 
     /// @brief Permet de savoir si le joueur était en jeu
     /// Utilisé pour savoir si afficher Jouer ou Reprendre
-
-    /// @brief Menu principal
     int isGameStarted;
+    
+    /// @brief Menu principal
     Menu* menu;
 } Scene;
 

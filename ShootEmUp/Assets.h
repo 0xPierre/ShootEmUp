@@ -14,11 +14,15 @@ typedef struct Assets_s
     SDL_Texture* player_gun_1;
     SDL_Texture* player_gun_2;
 
+    SDL_Texture* playerHeart;
+
     /// @brief Texture du tir du joueur.
-    SDL_Texture *playerBullet;
+    SDL_Texture* playerBullet;
+    SDL_Texture* playerBulletGun1;
+    SDL_Texture* playerBulletGun2;
 
     /// @brief Texture du vaisseau ennemi.
-    SDL_Texture *fighter1;
+    SDL_Texture* fighter1;
     SDL_Texture* fighter2;
     SDL_Texture* fighter3;
     SDL_Texture* fighter4;

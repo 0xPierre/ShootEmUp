@@ -24,6 +24,8 @@ Player *Player_New(Scene *scene)
     // La durée du powerup gun 2 est de 8 secondes
     self->gun2PowerUpDuration = 8;
 
+    self->isGun1PowerUpActivated = false;
+    self->isGun2PowerUpActivated = false;
 
     return self;
 }
@@ -93,11 +95,33 @@ void Player_Update(Player *self)
 
     // Gère le tir du joueur
     if (input->shootPressed) {
-        Vec2 velocity = Vec2_Set(7.0f, 0.0f);
-        Bullet* bullet = Bullet_New(
-            self->scene, self->position, velocity, BULLET_PLAYER, 90.0f);
-        Scene_AppendBullet(self->scene, bullet);
-        Mix_PlayChannel(-1, self->scene->assets->PlayerBulletSound, 0);
+        // Lorsque que le Canon 1 est activé, on tire 2 projectile
+        if (scene->player->isGun1PowerUpActivated || scene->player->isGun2PowerUpActivated) {
+            Vec2 velocity = Vec2_Set(7.0f, 0.0f);
+
+            Bullet* bullet_1 = Bullet_New(
+                self->scene,
+                // Le + 0.8 permet de déplacer la position de départ du projectile pour éviter qu'il apparaissent en dessous du player.
+                Vec2_Set(self->position.x + 0.8, self->position.y + 0.4),
+                velocity, BULLET_PLAYER, 90.0f);
+
+            Bullet* bullet_2 = Bullet_New(
+                self->scene,
+                Vec2_Set(self->position.x + 0.8, self->position.y - 0.4),
+                velocity, BULLET_PLAYER, 90.0f);
+
+            Scene_AppendBullet(self->scene, bullet_1);
+            Scene_AppendBullet(self->scene, bullet_2);
+
+            Mix_PlayChannel(-1, self->scene->assets->PlayerBulletSound, 0);
+        }
+        else {
+            Vec2 velocity = Vec2_Set(7.0f, 0.0f);
+            Bullet* bullet = Bullet_New(
+                self->scene, self->position, velocity, BULLET_PLAYER, 90.0f);
+            Scene_AppendBullet(self->scene, bullet);
+            Mix_PlayChannel(-1, self->scene->assets->PlayerBulletSound, 0);
+        }
     }
 
     // Gère les PowerUp de canon

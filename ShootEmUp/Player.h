@@ -3,6 +3,8 @@
 #include "Settings.h"
 #include "Math.h"
 
+#define MAX_PLAYER_LIVES 5;
+
 typedef struct Scene_s Scene;
 
 /// @brief Enumération représentant les états possibles du joueur.
@@ -47,6 +49,9 @@ typedef struct Player_s
 
     /// @brief Nombre de temps depuis le début de l'animation de mort
     float isDyingSince;
+
+    /// @brief Stocke l'objet SDL des coeurs
+    SDL_Rect hearts[5];
 
     /// @brief Etat du power up vitesse
     bool isSpeedPowerUpActivated;

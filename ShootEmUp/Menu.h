@@ -13,6 +13,7 @@ typedef struct Menu_s
     /// Utilisé pour afficher ou virer le menu
     int isOpen;
 
+    /// @brief Stocke l'objet SDL du menu
     SDL_Rect MenuStart;
     SDL_Rect MenuQuit;
 

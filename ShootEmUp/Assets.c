@@ -42,6 +42,7 @@ Assets *Assets_New(SDL_Renderer *renderer)
         { &self->fighter1,       "../Assets/Enemy/Enemy1.png"         },
         { &self->fighter2,       "../Assets/Enemy/Enemy2.png"         },
         { &self->fighter3,       "../Assets/Enemy/Enemy3.png"         },
+        { &self->fighter4,       "../Assets/Enemy/AndromedaRangerCaptain.png"         },
         { &self->fighterBullet, "../Assets/Enemy/fighter_bullet.png"  },
         { &self->player, "../Assets/Player/P-red-a.png"               },
         { &self->MenuQuit, "../Assets/Menu/quit2.png"                 },

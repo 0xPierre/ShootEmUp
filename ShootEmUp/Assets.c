@@ -35,19 +35,19 @@ Assets *Assets_New(SDL_Renderer *renderer)
     // Chargement des textures
 
     TextureSpec texSpecs[] = {
-        { &self->layers[0],     "../Assets/Background/bg1.png"                },
-        { &self->layers[1],     "../Assets/Background/bg2.png"                },
-        { &self->layers[2],     "../Assets/Background/bg3.png"                },
-        { &self->playerBullet,  "../Assets/Bullet/bulletp.png"                },
-        { &self->fighter1,       "../Assets/Enemy/Enemy1.png"                 },
-        { &self->fighter2,       "../Assets/Enemy/Enemy2.png"                 },
-        { &self->fighter3,       "../Assets/Enemy/Enemy3.png"                 },
-        { &self->fighter4,       "../Assets/Enemy/AndromedaRangerCaptain.png" },
-        { &self->fighterBullet, "../Assets/Bullet/bullete.png"                },
-        { &self->player, "../Assets/Player/P-red-a.png"                       },
-        { &self->MenuQuit, "../Assets/Menu/quit2.png"                         },
-        { &self->MenuStart, "../Assets/Menu/play.png"                         },
-        { &self->CollectibleHealth, "../Assets/Collectables/health.png"       }
+        { &self->layers[0],     "../Assets/Background/bg1.png"   },
+        { &self->layers[1],     "../Assets/Background/bg2.png"   },
+        { &self->layers[2],     "../Assets/Background/bg3.png"   },
+        { &self->playerBullet,  "../Assets/Bullet/bulletp.png" },
+        { &self->fighter1,       "../Assets/Enemy/Enemy1.png"         },
+        { &self->fighter2,       "../Assets/Enemy/Enemy2.png"         },
+        { &self->fighter3,       "../Assets/Enemy/Enemy3.png"         },
+        { &self->fighter4,       "../Assets/Enemy/AndromedaRangerCaptain.png"         },
+        { &self->fighter5,       "../Assets/Enemy/Enemy5.png"         },
+        { &self->fighterBullet, "../Assets/Bullet/bullete.png"  },
+        { &self->player, "../Assets/Player/P-red-a.png"               },
+        { &self->MenuQuit, "../Assets/Menu/quit2.png"                 },
+        { &self-> MenuStart, "../Assets/Menu/play.png"                }
     };
     int texSpecCount = sizeof(texSpecs) / sizeof(TextureSpec);
 
@@ -93,6 +93,8 @@ void Assets_Delete(Assets *self)
         &self->fighter1,
         & self->fighter2,
         & self->fighter3,
+        & self->fighter4,
+        & self->fighter5,
         &self->fighterBullet,
         &self->player,
     };

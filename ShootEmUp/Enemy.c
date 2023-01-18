@@ -56,7 +56,16 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
         self->radius = 1.2f;
         self->texture = assets->fighter4;
         self->remainingLives = 2;
-        self->timeBetweenBullets = 0.15;
+        self->timeBetweenBullets = 0.15f;
+        break;
+
+     case ENEMY_FIGHTER_5:
+        self->worldW = 120 * PIX_TO_WORLD;
+        self->worldH = 120 * PIX_TO_WORLD;
+        self->radius = 0.4f;
+        self->texture = assets->fighter5;
+        self->remainingLives = 2;
+        self->timeBetweenBullets = 0.5;
         break;
 
     default:
@@ -111,6 +120,24 @@ void Enemy_Update(Enemy *self)
          Scene_AppendBullet(self->scene, bullet);
 
         }
+        else if (self->type == ENEMY_FIGHTER_5)
+        {
+            // Le projectile part droit en haut
+            Vec2 velocity_1 = Vec2_Set(-5.0, 0);
+            Bullet* bullet_1 = Bullet_New(
+                self->scene,
+                Vec2_Add(Vec2_Set(0,0.4), self->position),
+                velocity_1, BULLET_FIGHTER, 90.0f);
+            Scene_AppendBullet(self->scene, bullet_1);
+
+            // Le projectile part droit en bas
+            Vec2 velocity_2 = Vec2_Set(-5.0, 0);
+            Bullet* bullet_2 = Bullet_New(
+                self->scene,
+                Vec2_Add(Vec2_Set(0, -0.4), self->position),
+                velocity_2, BULLET_FIGHTER, 90.0f);
+            Scene_AppendBullet(self->scene, bullet_2);
+        }
 
         self->lastBulletTime = g_time->currentTime;
 
@@ -120,7 +147,7 @@ void Enemy_Update(Enemy *self)
     /*
     Gère le mouvements des ennemis
     */
-    if (self->type == ENEMY_FIGHTER_1 || self->type == ENEMY_FIGHTER_2)
+    if (self->type == ENEMY_FIGHTER_1 || self->type == ENEMY_FIGHTER_2 || self->type == ENEMY_FIGHTER_5)
     {
         /*
         * Mouvement permettant de rester sur place mais de simuler un petit déplacement.

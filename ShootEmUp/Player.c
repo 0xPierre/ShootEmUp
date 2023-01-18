@@ -13,7 +13,17 @@ Player *Player_New(Scene *scene)
     self->position = Vec2_Set(1.0f, 4.5f);
     self->radius = 0.25f;
     self->texture = assets->player;
-    self->remainingLives = 2;
+    self->remainingLives = 5;
+    self->maximumLives = 5;
+
+    self->isSpeedPowerUpActivated = false;
+    // La durée du powerup vitesse est de 8 secondes
+    self->speedPowerUpDuration = 8;
+    // La durée du powerup gun 1 est de 8 secondes
+    self->gun1PowerUpDuration = 8;
+    // La durée du powerup gun 2 est de 8 secondes
+    self->gun2PowerUpDuration = 8;
+
 
     return self;
 }
@@ -30,19 +40,46 @@ void Player_Update(Player *self)
     Scene* scene = self->scene;
     Input* input = Scene_GetInput(scene);
     // Mise à jour de la vitesse en fonction de l'état des touches
-    Vec2 velocity = Vec2_Set(input->hAxis, input->vAxis);
-    // Mise à jour de la position, on fait attention a ne pas sortir du jeu.
-    if (
-        self->position.x+input->hAxis < 19.5
-        && self->position.x+input->hAxis > -3.67
-        && self->position.y+input->vAxis < 12.5
-        && self->position.y+input->vAxis > -3.5
-      )
-    { 
-            self->position = Vec2_Add( // Nouvelle pos. = ancienne pos. +
-            self->position, // (vitesse * temps écoulé)
-            Vec2_Scale(velocity, Timer_GetDelta(g_time)));
+  
+    // Lorsque que PowerUp est activé, on double la vitesse
+    if (self->isSpeedPowerUpActivated)
+    {
+        if (input->hAxis > 0)
+            input->hAxis = 6;
+        else if (input->hAxis < 0)
+           input->hAxis = -6;
+
+        if (input->vAxis > 0)
+            input->vAxis = 6;
+        else if (input->vAxis < 0)
+            input->vAxis = -6;
+
+        // On regarde si on doit le désactiver
+        if (g_time->currentTime - self->speedPowerUpActivatedSince > self->speedPowerUpDuration)
+        {
+            self->isSpeedPowerUpActivated = false;
+        }
     }
+    Vec2 velocity = Vec2_Set(input->hAxis, input->vAxis);
+
+    // Mise à jour de la position
+    Vec2 possiblePosition = Vec2_Add( // Nouvelle pos. = ancienne pos. +
+    self->position, // (vitesse * temps écoulé)
+    Vec2_Scale(velocity, Timer_GetDelta(g_time)));
+
+
+    // on fait attention a ne pas sortir du jeu.
+    if (possiblePosition.x > 15.25)
+        possiblePosition.x = self->position.x;
+    if (possiblePosition.x < 0.5)
+        possiblePosition.x = self->position.x;
+    if (possiblePosition.y > 8.30)
+        possiblePosition.y = self->position.y;
+    if (possiblePosition.y < 0.70)
+        possiblePosition.y = self->position.y;
+
+    self->position = possiblePosition;
+    
     
     // On attends que l'animation de mort du joueur soit passé pour passé son état en PLAYER_DEAD
     if (self->state == PLAYER_DYING)
@@ -54,12 +91,36 @@ void Player_Update(Player *self)
         }
     }
 
+    // Gère le tir du joueur
     if (input->shootPressed) {
         Vec2 velocity = Vec2_Set(7.0f, 0.0f);
         Bullet* bullet = Bullet_New(
             self->scene, self->position, velocity, BULLET_PLAYER, 90.0f);
         Scene_AppendBullet(self->scene, bullet);
         Mix_PlayChannel(-1, self->scene->assets->PlayerBulletSound, 0);
+    }
+
+    // Gère les PowerUp de canon
+
+    if (self->isGun1PowerUpActivated)
+    {
+        // On regarde si on doit désactiver le canon 1
+        if (g_time->currentTime - self->gun1PowerUpActivatedSince > self->gun1PowerUpDuration)
+        {
+            self->isGun1PowerUpActivated = false;
+            Assets* assets = Scene_GetAssets(scene);
+            self->texture = assets->player;
+        }
+    }
+    else if (self->isGun2PowerUpActivated)
+    {
+        // On regarde si on doit désactiver le canon 2
+        if (g_time->currentTime - self->gun2PowerUpActivatedSince > self->gun2PowerUpDuration)
+        {
+            self->isGun2PowerUpActivated = false;
+            Assets* assets = Scene_GetAssets(scene);
+            self->texture = assets->player;
+        }
     }
 }
 

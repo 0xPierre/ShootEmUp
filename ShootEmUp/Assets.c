@@ -48,8 +48,14 @@ Assets *Assets_New(SDL_Renderer *renderer)
         { &self->fighter7,       "../Assets/Enemy/Enemy7.png"         },
         { &self->fighterBullet, "../Assets/Bullet/bullete.png"  },
         { &self->player, "../Assets/Player/P-red-a.png"               },
+        { &self->player_gun_1, "../Assets/Player/P-red-d.png"               },
+        { &self->player_gun_2, "../Assets/Player/P-red-d2.png"               },
         { &self->MenuQuit, "../Assets/Menu/quit2.png"                 },
-        { &self-> MenuStart, "../Assets/Menu/play.png"                }
+        { &self-> MenuStart, "../Assets/Menu/play.png"                },
+        { &self->CollectableHealth, "../Assets/Collectables/health.png"    },
+        { &self->CollectableSpeed, "../Assets/Collectables/speed.png"                },
+        { &self->CollectableBullet1, "../Assets/Collectables/bull.png"                },
+        { &self->CollectableBullet2, "../Assets/Collectables/rocket.png"                },
     };
     int texSpecCount = sizeof(texSpecs) / sizeof(TextureSpec);
 
@@ -81,7 +87,7 @@ void Assets_Delete(Assets *self)
 
     // -------------------------------------------------------------------------
     // Libère les audios/musics
-    Mix_FreeChunk(self->backgroundMusic);
+    Mix_FreeMusic(self->backgroundMusic);
     self->backgroundMusic = NULL;
 
     // -------------------------------------------------------------------------

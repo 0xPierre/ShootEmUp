@@ -10,7 +10,9 @@ typedef struct Assets_s
     SDL_Texture *layers[3];
 
     /// @brief Texture du vaisseau du joueur.
-    SDL_Texture *player;
+    SDL_Texture* player;
+    SDL_Texture* player_gun_1;
+    SDL_Texture* player_gun_2;
 
     /// @brief Texture du tir du joueur.
     SDL_Texture *playerBullet;
@@ -38,10 +40,10 @@ typedef struct Assets_s
     SDL_Texture* MenuStart;
     SDL_Texture* MenuQuit;
 
-    SDL_Texture* CollectibleHealth;
-    SDL_Texture* CollectibleSpeed;
-    SDL_Texture* CollectibleBullet1;
-    SDL_Texture* CollectibleBullet2;
+    SDL_Texture* CollectableHealth;
+    SDL_Texture* CollectableSpeed;
+    SDL_Texture* CollectableBullet1;
+    SDL_Texture* CollectableBullet2;
 } Assets;
 
 /// @brief Crée la structure contenant les assets du jeu.

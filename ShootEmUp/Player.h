@@ -42,8 +42,38 @@ typedef struct Player_s
     /// @brief Nombre de vies restantes du joueur
     int remainingLives;
 
+    /// @brief Nombre de vie maximal du joueur
+    int maximumLives;
+
     /// @brief Nombre de temps depuis le début de l'animation de mort
     float isDyingSince;
+
+    /// @brief Etat du power up vitesse
+    bool isSpeedPowerUpActivated;
+
+    /// @brief Temps auquel le powerup a été activé pour la dernière fois
+    float speedPowerUpActivatedSince;
+
+    /// @brief Durée d'activation du powerup vitesse
+    float speedPowerUpDuration;
+
+    /// @brief Etat du power up gun upgrade 1
+    bool isGun1PowerUpActivated;
+
+    /// @brief Temps auquel le powerup a été activé pour la dernière fois
+    float gun1PowerUpActivatedSince;
+
+    /// @brief Durée d'activation du powerup vitesse
+    float gun1PowerUpDuration;
+
+    /// @brief Etat du power up gun upgrade 1
+    bool isGun2PowerUpActivated;
+
+    /// @brief Temps auquel le powerup a été activé pour la dernière fois
+    float gun2PowerUpActivatedSince;
+
+    /// @brief Durée d'activation du powerup vitesse
+    float gun2PowerUpDuration;
 } Player;
 
 /// @brief Crée un nouveau joueur.

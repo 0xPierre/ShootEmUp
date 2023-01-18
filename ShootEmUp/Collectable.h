@@ -12,7 +12,7 @@ typedef enum CollectableType_e
     COLLECTABLE_HEALTH,
     COLLECTABLE_GUN_UPGRADE_1,
     COLLECTABLE_GUN_UPGRADE_2,
-    COLLECTABLE_SPEED,
+    COLLECTABLE_SPEED
 } CollectableType;
 
 /// @brief Structure représentant le menu du jeu.

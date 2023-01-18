@@ -15,7 +15,8 @@ Scene *Scene_New(SDL_Renderer *renderer)
     self->isGameStarted = 0;
     self->menu = Menu_New(self);
 
-    self->timeBetweenCollectables = 2;
+    self->hasFirstCollectableBeenSent = false;
+    self->timeBetweenCollectables = 5;
     self->lastCollectableTime = g_time->currentTime;
     self->collectablesCount = 0;
 
@@ -108,8 +109,6 @@ void Scene_UpdateLevel(Scene *self)
 bool Scene_Update(Scene *self)
 {
     Player *player = self->player;
-
-    //printf("Vie : %d\n", self->player->remainingLives);
 
     // Met à jour les entrées utilisateur
     Input_Update(self->input);
@@ -257,6 +256,11 @@ bool Scene_Update(Scene *self)
     if (g_time->currentTime - self->lastCollectableTime >= self->timeBetweenCollectables)
     {
         createRandomCollectable(self);
+
+        if (!self->hasFirstCollectableBeenSent) {
+            self->hasFirstCollectableBeenSent = true;
+            //self->timeBetweenCollectables = 10;
+        }
     }
 
     // -------------------------------------------------------------------------

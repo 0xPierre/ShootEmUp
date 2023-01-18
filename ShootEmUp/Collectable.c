@@ -10,20 +10,31 @@ Collectable* Collectable_New(Scene* scene, CollectableType type, Vec2 position)
     self->scene = scene;
     scene->lastCollectableTime = g_time->currentTime;
     self->position = position;
+    self->radius = 0.4f;
+    self->worldW = 30 * PIX_TO_WORLD;
+    self->worldH = 30 * PIX_TO_WORLD;
+    self->radius = 0.05f;
+    self->velocity = Vec2_Set(-2, 0);
+    self->type = (int)type;
    
     Assets* assets = Scene_GetAssets(self->scene);
-
-    printf("Collectable Spawned\n");
 
     switch (type)
     {
     case COLLECTABLE_HEALTH:
-        self->texture = assets->CollectibleHealth;
-        self->radius = 0.4f;
-        self->worldW = 30 * PIX_TO_WORLD;
-        self->worldH = 30 * PIX_TO_WORLD;
-        self->radius = 0.05f;
-        self->velocity = Vec2_Set(-2, 0);
+        self->texture = assets->CollectableHealth;
+        break;
+
+    case COLLECTABLE_SPEED:
+        self->texture = assets->CollectableSpeed;
+        break;
+
+    case COLLECTABLE_GUN_UPGRADE_1:
+        self->texture = assets->CollectableBullet1;
+        break;
+
+    case COLLECTABLE_GUN_UPGRADE_2:
+        self->texture = assets->CollectableBullet2;
         break;
     }
 
@@ -75,9 +86,9 @@ void Collectable_Render(Collectable* self)
 
 void createRandomCollectable(Scene* scene)
 {
-    // Calcul du type de collectabl
+    // Calcul du type de collectable
     int collectableRandType = rand() % 100;
-    CollectableType collectableType = COLLECTABLE_HEALTH;
+    CollectableType collectableType = COLLECTABLE_GUN_UPGRADE_1;
 
     if (collectableRandType >= 75)
     {
@@ -98,7 +109,7 @@ void createRandomCollectable(Scene* scene)
 
     // Calcul de la position en Y
     int posY = rand() % ((8 + 1) - 1) + 1;
-    Collectable* collectable = Collectable_New(scene, collectableType, Vec2_Set(17, posY));
+    Collectable* collectable = Collectable_New(scene, collectableType, Vec2_Set(17, (float)posY));
     
     scene->collectablesCount++;
     scene->collectables[scene->collectablesCount] = collectable;
@@ -106,8 +117,42 @@ void createRandomCollectable(Scene* scene)
 
 void manageCollectable(Collectable* collectable)
 {
-    if (collectable->type == COLLECTABLE_HEALTH)
+    Scene* scene = collectable->scene;
+    Assets* assets = Scene_GetAssets(scene);
+    Player* player = scene->player;
+
+    int type = collectable->type;
+    switch ((int)type)
     {
-        collectable->scene->player->remainingLives++;
+    case COLLECTABLE_HEALTH:
+        // La vie est ajouté seulement si le joueur n'est pas à son maximum de vie
+        if (player->remainingLives < player->maximumLives)
+            player->remainingLives++;
+        break;
+
+    case COLLECTABLE_SPEED:
+        // Active le powerup vitesse
+        player->isSpeedPowerUpActivated = true;
+        player->speedPowerUpActivatedSince = g_time->currentTime;
+        break;
+
+    case COLLECTABLE_GUN_UPGRADE_1:
+        // on active l'upgrade de Canon 1
+        player->isGun1PowerUpActivated = true;
+        // on désactive l'upgrade De Canon 2
+        player->isGun2PowerUpActivated = false;
+        player->gun1PowerUpActivatedSince = g_time->currentTime;
+        player->texture = assets->player_gun_1;
+        break;
+
+    case COLLECTABLE_GUN_UPGRADE_2:
+        // on active l'upgrade de Canon 2
+        player->isGun2PowerUpActivated = true;
+        // on désactive l'upgrade De Canon 1
+        player->isGun1PowerUpActivated = false;
+        player->gun2PowerUpActivatedSince = g_time->currentTime;
+        player->texture = assets->player_gun_2;
+        break;
     }
+
 }

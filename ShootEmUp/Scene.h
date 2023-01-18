@@ -70,8 +70,11 @@ typedef struct Scene_s
     /// @brief Temps depuis le dernier collectable
     float lastCollectableTime;
     
-    /// Temps entre chaque collectables
+    /// @brief Temps entre chaque collectables
     float timeBetweenCollectables;
+
+    /// @brief
+    bool hasFirstCollectableBeenSent;
 
 } Scene;
 

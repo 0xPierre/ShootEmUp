@@ -18,7 +18,6 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
     */
     self->randomStartingTickX = (rand() % 1000);
     self->randomStartingTickY = (rand() % 1000);
-    printf("%d %d\n", self->randomStartingTickX, self->randomStartingTickY);
 
     Assets *assets = Scene_GetAssets(self->scene);
     switch (type)
@@ -134,7 +133,7 @@ void Enemy_Update(Enemy *self)
         else if (self->type == ENEMY_FIGHTER_4)
         {
             // Les projectiles partent de bas en haut en balayant l'écran
-         Vec2 velocity = Vec2_Set(-9.0, ((int) g_time->currentTime % 6) - 3);
+         Vec2 velocity = Vec2_Set(-9.0, (float)((int) g_time->currentTime % 6) - 3);
          Bullet* bullet = Bullet_New( self->scene, self->position, velocity, BULLET_FIGHTER, 90.0f);
          Scene_AppendBullet(self->scene, bullet);
 
@@ -145,7 +144,7 @@ void Enemy_Update(Enemy *self)
             Vec2 velocity_1 = Vec2_Set(-5.0, 0);
             Bullet* bullet_1 = Bullet_New(
                 self->scene,
-                Vec2_Add(Vec2_Set(0,0.4), self->position),
+                Vec2_Add(Vec2_Set(0,0.4f), self->position),
                 velocity_1, BULLET_FIGHTER, 90.0f);
             Scene_AppendBullet(self->scene, bullet_1);
 
@@ -153,7 +152,7 @@ void Enemy_Update(Enemy *self)
             Vec2 velocity_2 = Vec2_Set(-5.0, 0);
             Bullet* bullet_2 = Bullet_New(
                 self->scene,
-                Vec2_Add(Vec2_Set(0, -0.4), self->position),
+                Vec2_Add(Vec2_Set(0, -0.4f), self->position),
                 velocity_2, BULLET_FIGHTER, 90.0f);
             Scene_AppendBullet(self->scene, bullet_2);
         }
@@ -162,12 +161,12 @@ void Enemy_Update(Enemy *self)
             // le projectile pars et dessine un cercle autour de l'enemi
             if (self->lastTypeofBullet == 0)
             {
-                for (int j = 0; j < 45; j++)
+                for (float j = 0; j < 45; j++)
                 {
                     Vec2 velocity_2 = Vec2_Set(3 * cosf(j), 3 * sinf(j));
                     Bullet* bullet_1 = Bullet_New(
                         self->scene,
-                        Vec2_Add(Vec2_Set(-0.1, 0), self->position),
+                        Vec2_Add(Vec2_Set(-0.1f, 0), self->position),
                         velocity_2, BULLET_FIGHTER, 90.0f);
                     Scene_AppendBullet(self->scene, bullet_1);
                 }
@@ -180,7 +179,7 @@ void Enemy_Update(Enemy *self)
                     Vec2 velocity_2 = Vec2_Set(3 * cosf(k), 3 * sinf(k));
                     Bullet* bullet_2 = Bullet_New(
                         self->scene,
-                        Vec2_Add(Vec2_Set(-0.1, 0), self->position),
+                        Vec2_Add(Vec2_Set(-0.f, 0), self->position),
                         velocity_2, BULLET_FIGHTER, 90.0f);
                     Scene_AppendBullet(self->scene, bullet_2);
                 }
@@ -227,7 +226,7 @@ void Enemy_Update(Enemy *self)
         /*
         * Mouvement de type sinusoidale ( sur l'axe Y).
         */
-        float sinPos = sinf(g_time->currentTime + self->randomStartingTickY)*1.5;
+        float sinPos = sinf(g_time->currentTime + self->randomStartingTickY) * 1.5f;
 
         Vec2 velocity = Vec2_Set(
             0,
@@ -244,7 +243,7 @@ void Enemy_Update(Enemy *self)
         * Mouvement chelou
         */
         float Posy = sinf(g_time->currentTime + self->randomStartingTickY);
-        float Posx = sinf(g_time->currentTime + self->randomStartingTickX)*0.5 ;
+        float Posx = sinf(g_time->currentTime + self->randomStartingTickX) * 0.5f;
         Vec2 velocity = Vec2_Set( Posx, Posy);
         self->position = Vec2_Add( self->position, Vec2_Scale(velocity, Timer_GetDelta(g_time)));
     }

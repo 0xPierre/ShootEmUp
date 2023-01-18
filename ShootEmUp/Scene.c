@@ -49,7 +49,7 @@ void Scene_UpdateLevel(Scene *self)
 
     if (self->waveIdx == 0)
     {
-        Enemy *enemy = Enemy_New(self, ENEMY_FIGHTER_1, Vec2_Set(14.0f, 4.5f));
+        Enemy *enemy = Enemy_New(self, ENEMY_FIGHTER_7, Vec2_Set(14.0f, 4.5f));
         Scene_AppendEnemy(self, enemy);
         self->waveIdx++;
     }
@@ -77,12 +77,27 @@ void Scene_UpdateLevel(Scene *self)
     {
         Enemy* enemy = Enemy_New(self, ENEMY_FIGHTER_4, Vec2_Set(12.0f, 4.5f));
         Scene_AppendEnemy(self, enemy);
-        self->waveIdx++;
+        
         Enemy* enemy_1 = Enemy_New(self, ENEMY_FIGHTER_2, Vec2_Set(13.0f, 7.5f));
         Scene_AppendEnemy(self, enemy_1);
 
         Enemy* enemy_2 = Enemy_New(self, ENEMY_FIGHTER_2, Vec2_Set(13.0f, 3.5f));
         Scene_AppendEnemy(self, enemy_2);
+
+        self->waveIdx++;
+    }
+    else if (self->waveIdx == 4)
+    {
+        Enemy* enemy = Enemy_New(self, ENEMY_FIGHTER_6, Vec2_Set(12.0f, 4.5f));
+        Scene_AppendEnemy(self, enemy);
+
+        Enemy* enemy_1 = Enemy_New(self, ENEMY_FIGHTER_7, Vec2_Set(13.0f, 7.5f));
+        Scene_AppendEnemy(self, enemy_1);
+
+        Enemy* enemy_2 = Enemy_New(self, ENEMY_FIGHTER_7, Vec2_Set(13.0f, 3.5f));
+        Scene_AppendEnemy(self, enemy_2);
+
+        self->waveIdx++;
     }
 }
 

@@ -33,6 +33,11 @@ typedef struct Assets_s
     SDL_Texture* MenuRestart;
     SDL_Texture* MenuStart;
     SDL_Texture* MenuQuit;
+
+    SDL_Texture* CollectibleHealth;
+    SDL_Texture* CollectibleSpeed;
+    SDL_Texture* CollectibleBullet1;
+    SDL_Texture* CollectibleBullet2;
 } Assets;
 
 /// @brief Crée la structure contenant les assets du jeu.

@@ -44,6 +44,7 @@ Assets *Assets_New(SDL_Renderer *renderer)
         { &self->fighter3,       "../Assets/Enemy/Enemy3.png"         },
         { &self->fighter4,       "../Assets/Enemy/AndromedaRangerCaptain.png"         },
         { &self->fighter5,       "../Assets/Enemy/Enemy5.png"         },
+        { &self->fighter5,       "../Assets/Enemy/EnemyBoss2Gold.png"         },
         { &self->fighterBullet, "../Assets/Bullet/bullete.png"  },
         { &self->player, "../Assets/Player/P-red-a.png"               },
         { &self->MenuQuit, "../Assets/Menu/quit2.png"                 },
@@ -95,6 +96,7 @@ void Assets_Delete(Assets *self)
         & self->fighter3,
         & self->fighter4,
         & self->fighter5,
+        & self->fighter6,
         &self->fighterBullet,
         &self->player,
     };

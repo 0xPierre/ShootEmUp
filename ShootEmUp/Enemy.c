@@ -78,6 +78,15 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
         self-> lastTypeofBullet = 0;
          break;
 
+     case ENEMY_FIGHTER_7:
+         self->worldW = 120 * PIX_TO_WORLD;
+         self->worldH = 120 * PIX_TO_WORLD;
+         self->radius = 0.4f;
+         self->texture = assets->fighter7;
+         self->remainingLives = 2;
+         self->timeBetweenBullets = 1.0;
+         self->lastTypeofBullet = 0;
+         break;
     default:
         assert(false);
         break;
@@ -177,13 +186,16 @@ void Enemy_Update(Enemy *self)
                 }
                 self->lastTypeofBullet--;
             }
-        
-
-            
-            
-            
+         
         }
+        else if (self->type == ENEMY_FIGHTER_7)
+        {
+            // Les projectiles partent de bas en haut en balayant l'écran
+            Vec2 velocity = Vec2_Set(Vec2_Sub(self->scene->player->position, self->position).x, Vec2_Sub(self->scene->player->position, self->position).y);
+            Bullet* bullet = Bullet_New(self->scene, self->position, velocity, BULLET_FIGHTER, 90.0f);
+            Scene_AppendBullet(self->scene, bullet);
 
+        }
         self->lastBulletTime = g_time->currentTime;
 
         Mix_PlayChannel(-1, self->scene->assets->EnemyBulletSound1, 0);

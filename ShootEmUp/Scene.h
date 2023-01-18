@@ -10,12 +10,15 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Menu.h"
+#include "Collectable.h"
 
 // Nombre maximal d'ennemis actifs dans un niveau.
 #define ENEMY_CAPACITY 32
 
 // Nombre maximal de projectiles actifs dans un niveau.
 #define BULLET_CAPACITY 256
+
+#define COLLECTABLE_CAPACITY 50
 
 /// @brief Structure représentant la scène principale du jeu (niveau).
 typedef struct Scene_s
@@ -57,6 +60,19 @@ typedef struct Scene_s
     
     /// @brief Menu principal
     Menu* menu;
+
+    /// @brief Liste des collectables
+    Collectable* collectables[COLLECTABLE_CAPACITY];
+
+    /// @brief Nombre de collectables
+    int collectablesCount;
+    
+    /// @brief Temps depuis le dernier collectable
+    float lastCollectableTime;
+    
+    /// Temps entre chaque collectables
+    float timeBetweenCollectables;
+
 } Scene;
 
 /// @brief Crée la scène principale du jeu.
@@ -97,6 +113,11 @@ void Scene_AppendEnemy(Scene *self, Enemy *enemy);
 /// @param self la scène.
 /// @param index l'indice du l'ennemi à supprimer dans le tableau self->enemies.
 void Scene_RemoveEnemy(Scene *self, int index);
+
+/// @brief Supprime un collectable de la scène.
+/// @param self la scène.
+/// @param index l'indice du collectable à supprimer dans le tableau self->collectables.
+void Scene_RemoveCollectable(Scene* self, int index);
 
 /// @brief Renvoie le moteur de rendu de la scène.
 /// @param self la scène.

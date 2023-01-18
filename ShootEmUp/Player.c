@@ -32,16 +32,18 @@ void Player_Update(Player *self)
     // Mise à jour de la vitesse en fonction de l'état des touches
     Vec2 velocity = Vec2_Set(input->hAxis, input->vAxis);
     // Mise à jour de la position, on fait attention a ne pas sortir du jeu.
-    if ( self->position.x+input->hAxis   < 19.5 && self->position.x+input->hAxis > -3.67 && self->position.y+input->vAxis < 12.5 && self->position.y+input->vAxis > -3.5 )
+    if (
+        self->position.x+input->hAxis < 19.5
+        && self->position.x+input->hAxis > -3.67
+        && self->position.y+input->vAxis < 12.5
+        && self->position.y+input->vAxis > -3.5
+      )
     { 
             self->position = Vec2_Add( // Nouvelle pos. = ancienne pos. +
             self->position, // (vitesse * temps écoulé)
             Vec2_Scale(velocity, Timer_GetDelta(g_time)));
-
-            
     }
     
-      
     // On attends que l'animation de mort du joueur soit passé pour passé son état en PLAYER_DEAD
     if (self->state == PLAYER_DYING)
     {

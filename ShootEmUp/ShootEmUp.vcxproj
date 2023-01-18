@@ -136,6 +136,7 @@
     <ClCompile Include="Assets.c" />
     <ClCompile Include="Bullet.c" />
     <ClCompile Include="Camera.c" />
+    <ClCompile Include="Collectable.c" />
     <ClCompile Include="Common.c" />
     <ClCompile Include="Enemy.c" />
     <ClCompile Include="Input.c" />
@@ -152,6 +153,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Collectable.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Menu.h" />

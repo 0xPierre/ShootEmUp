@@ -15,6 +15,10 @@ Scene *Scene_New(SDL_Renderer *renderer)
     self->isGameStarted = 0;
     self->menu = Menu_New(self);
 
+    self->timeBetweenCollectables = 2;
+    self->lastCollectableTime = g_time->currentTime;
+    self->collectablesCount = 0;
+
     return self;
 }
 
@@ -105,6 +109,8 @@ bool Scene_Update(Scene *self)
 {
     Player *player = self->player;
 
+    //printf("Vie : %d\n", self->player->remainingLives);
+
     // Met à jour les entrées utilisateur
     Input_Update(self->input);
 
@@ -178,8 +184,8 @@ bool Scene_Update(Scene *self)
         }
     }
 
-// -------------------------------------------------------------------------
-// Met à jour les ennemis
+    // -------------------------------------------------------------------------
+    // Met à jour les ennemis
 
     i = 0;
     while (i < self->enemyCount)
@@ -201,6 +207,56 @@ bool Scene_Update(Scene *self)
         {
             i++;
         }
+    }
+
+    // -------------------------------------------------------------------------
+    // Met à jour les collectable
+    i = 0;
+    while (i < self->collectablesCount)
+    {
+        Collectable* collectable = self->collectables[i];
+        bool removed = false;
+        
+        if (collectable) {
+            Collectable_Update(collectable);
+
+            // Regarde si le collectable se trouve en dehors des limites
+            bool outOfBounds =
+                (collectable->position.x < -1.0f) ||
+                (collectable->position.x > 20.0f) ||
+                (collectable->position.y < -1.0f) ||
+                (collectable->position.y > 10.0f);
+
+            if (outOfBounds)
+            {
+                // Supprime le collectable
+                Scene_RemoveCollectable(self, i);
+                removed = true;
+                continue;
+            }
+
+            // Teste la collision avec le joueur
+            float dist = Vec2_Distance(collectable->position, self->player->position);
+            if (dist < collectable->radius + player->radius)
+            {
+                manageCollectable(collectable);
+                // Supprime le collectable
+                Scene_RemoveCollectable(self, i);
+                removed = true;
+            }
+        }
+
+        // Passe au prochain collectable
+        if (removed == false)
+        {
+            i++;
+        }
+    }
+
+    // Créé un collectable lorsque le temps entre chaque collectable a été dépassé
+    if (g_time->currentTime - self->lastCollectableTime >= self->timeBetweenCollectables)
+    {
+        createRandomCollectable(self);
     }
 
     // -------------------------------------------------------------------------
@@ -240,6 +296,16 @@ void Scene_Render(Scene *self)
         for (int i = 0; i < enemyCount; i++)
         {
             Enemy_Render(self->enemies[i]);
+        }
+
+        // Affichage des collectables
+        int collectablesCount = self->collectablesCount;
+        for (int i = 0; i < collectablesCount; i++)
+        {
+            if (self->collectables[i])
+            {
+                Collectable_Render(self->collectables[i]);
+            }
         }
 
         // Affichage du joueur
@@ -320,4 +386,10 @@ void Scene_RemoveBullet(Scene *self, int index)
 {
     Bullet_Delete(self->bullets[index]);
     Scene_RemoveObject(index, (void **)(self->bullets), &(self->bulletCount));
+}
+
+void Scene_RemoveCollectable(Scene* self, int index)
+{
+    Collectable_Delete(self->collectables[index]);
+    Scene_RemoveObject(index, (void**)(self->collectables), &(self->collectablesCount));
 }

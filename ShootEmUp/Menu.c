@@ -74,7 +74,6 @@ void Menu_Render(Menu* self)
 
 int isInsideRect(int x, int y, int w, int h, int mouseX, int mouseY)
 {
-    //printf("%d %d %d %d\n", x, y, w, h);
     return (int)(
         mouseX >= x
         && mouseX <= x + w
@@ -94,7 +93,8 @@ void changeCursor(Menu* self)
     */
     bool showCursorPointer = false;
 
-   if (isInsideRect(
+    // Regarde si le curseur pointe sur le bouton Jouer
+    if (isInsideRect(
         self->MenuStart.x,
         self->MenuStart.y,
         self->MenuStart.w,
@@ -104,6 +104,7 @@ void changeCursor(Menu* self)
     ))
         showCursorPointer = true;
 
+    // Regarde si le curseur pointe sur le bouton Quitter
     else if (isInsideRect(
         self->MenuQuit.x,
         self->MenuQuit.y,
@@ -115,7 +116,7 @@ void changeCursor(Menu* self)
         showCursorPointer = true;
 
 
-
+   // Change le curseur
     if (showCursorPointer)
     {
         SDL_SetCursor(self->cursor_pointer);
@@ -128,6 +129,7 @@ void changeCursor(Menu* self)
 
 void mouseClickActionIntersectionMenu(int mouseX, int mouseY, Menu *self)
 {
+    // Regarde si le bouton joué a été cliqué
     if (isInsideRect(
         self->MenuStart.x,
         self->MenuStart.y,
@@ -140,6 +142,7 @@ void mouseClickActionIntersectionMenu(int mouseX, int mouseY, Menu *self)
         self->scene->isGameStarted = true;
     }
 
+    // Regarde si le bouton Quitter à été cliqué
     else if (isInsideRect(
         self->MenuQuit.x,
         self->MenuQuit.y,

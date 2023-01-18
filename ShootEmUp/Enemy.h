@@ -28,6 +28,7 @@ typedef enum EnemyType_e
     ENEMY_FIGHTER_3,
     ENEMY_FIGHTER_4,
     ENEMY_FIGHTER_5,
+    ENEMY_FIGHTER_6,
 } EnemyType;
 
 /// @brief Structure représentant un ennemi.
@@ -73,6 +74,9 @@ typedef struct Enemy_s
     /// @brief Ecart de temps entre chaque projectil.
     /// Utilisé lorsque l'ennemi s'update.
     float lastBulletTime;
+
+    /// quel type de balle on tire
+    int lastTypeofBullet;
 
     /// @brief Valeur aléatoire de départ de mouvement en X.
     /// Utilisé pour éviter que les mouvements se ressemblent trop.

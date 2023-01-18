@@ -68,6 +68,16 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
         self->timeBetweenBullets = 0.5;
         break;
 
+     case ENEMY_FIGHTER_6:
+         self->worldW = 240 * PIX_TO_WORLD;
+         self->worldH = 240 * PIX_TO_WORLD;
+         self->radius = 1.2f;
+         self->texture = assets->fighter6;
+         self->remainingLives = 2;
+         self->timeBetweenBullets = 1.0;
+        self-> lastTypeofBullet = 0;
+         break;
+
     default:
         assert(false);
         break;
@@ -137,6 +147,41 @@ void Enemy_Update(Enemy *self)
                 Vec2_Add(Vec2_Set(0, -0.4), self->position),
                 velocity_2, BULLET_FIGHTER, 90.0f);
             Scene_AppendBullet(self->scene, bullet_2);
+        }
+        else if (self->type == ENEMY_FIGHTER_6)
+        {
+            // le projectile pars et dessine un cercle autour de l'enemi
+            if (self->lastTypeofBullet == 0)
+            {
+                for (int j = 0; j < 45; j++)
+                {
+                    Vec2 velocity_2 = Vec2_Set(3 * cosf(j), 3 * sinf(j));
+                    Bullet* bullet_1 = Bullet_New(
+                        self->scene,
+                        Vec2_Add(Vec2_Set(-0.1, 0), self->position),
+                        velocity_2, BULLET_FIGHTER, 90.0f);
+                    Scene_AppendBullet(self->scene, bullet_1);
+                }
+                self->lastTypeofBullet++;
+            }
+            else 
+            {
+                for (float k = 0.5; k < 45; k++)
+                {
+                    Vec2 velocity_2 = Vec2_Set(3 * cosf(k), 3 * sinf(k));
+                    Bullet* bullet_2 = Bullet_New(
+                        self->scene,
+                        Vec2_Add(Vec2_Set(-0.1, 0), self->position),
+                        velocity_2, BULLET_FIGHTER, 90.0f);
+                    Scene_AppendBullet(self->scene, bullet_2);
+                }
+                self->lastTypeofBullet--;
+            }
+        
+
+            
+            
+            
         }
 
         self->lastBulletTime = g_time->currentTime;

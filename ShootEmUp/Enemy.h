@@ -75,11 +75,11 @@ typedef struct Enemy_s
 
     /// @brief Valeur aléatoire de départ de mouvement en X.
     /// Utilisé pour éviter que les mouvements se ressemblent trop.
-    float randomStartingTickX;
+    int randomStartingTickX;
 
     /// @brief Valeur aléatoire de départ de mouvement en Y.
     /// Utilisé pour éviter que les mouvements se ressemblent trop.
-    float randomStartingTickY;
+    int randomStartingTickY;
 } Enemy;
 
 /// @brief Crée un nouvel ennemi.

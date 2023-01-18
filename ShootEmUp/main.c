@@ -3,9 +3,11 @@
 #include "Common.h"
 #include "Timer.h"
 #include "Scene.h"
+#include <time.h>
 
 int main(int argc, char *argv[])
 {
+    srand(time(NULL));
     //--------------------------------------------------------------------------
     // Initialisation
 

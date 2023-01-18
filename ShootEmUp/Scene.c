@@ -12,7 +12,7 @@ Scene *Scene_New(SDL_Renderer *renderer)
     self->input = Input_New(self);
     self->player = Player_New(self);
     self->waveIdx = 0;
-    self->isGameStarted = 1;
+    self->isGameStarted = 0;
     self->menu = Menu_New(self);
 
     return self;
@@ -65,10 +65,10 @@ void Scene_UpdateLevel(Scene *self)
     }
     else if (self->waveIdx == 2)
     {
-        Enemy* enemy_1 = Enemy_New(self, ENEMY_FIGHTER_3, Vec2_Set(13.0f, 7.0f));
+        Enemy* enemy_1 = Enemy_New(self, ENEMY_FIGHTER_3, Vec2_Set(13.0f, 4.5f));
         Scene_AppendEnemy(self, enemy_1);
 
-        Enemy* enemy_2 = Enemy_New(self, ENEMY_FIGHTER_3, Vec2_Set(14.0f, 4.0f));
+        Enemy* enemy_2 = Enemy_New(self, ENEMY_FIGHTER_3, Vec2_Set(14.0f, 4.5f));
         Scene_AppendEnemy(self, enemy_2);
 
         self->waveIdx++;

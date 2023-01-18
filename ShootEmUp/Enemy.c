@@ -16,8 +16,9 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
     /*
     Permet de générer un mouvement qui ne ressemble pas aux autres objets.
     */
-    self->randomStartingTickX = (float)(rand() % 1000);
-    self->randomStartingTickY = (float)(rand() % 1000);
+    self->randomStartingTickX = (rand() % 1000);
+    self->randomStartingTickY = (rand() % 1000);
+    printf("%d %d\n", self->randomStartingTickX, self->randomStartingTickY);
 
     Assets *assets = Scene_GetAssets(self->scene);
     switch (type)
@@ -140,9 +141,9 @@ void Enemy_Update(Enemy *self)
     else if (self->type == ENEMY_FIGHTER_3)
     {
         /*
-        * Mouvement de type sinusoidale ( lineaire sur l'axe Y).
+        * Mouvement de type sinusoidale ( sur l'axe Y).
         */
-        float sinPos = sinf(g_time->currentTime + self->randomStartingTickY) * 2;
+        float sinPos = sinf(g_time->currentTime + self->randomStartingTickY)*1.5;
 
         Vec2 velocity = Vec2_Set(
             0,

@@ -49,6 +49,15 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
         self->timeBetweenBullets = 1;
         break;
 
+    case ENEMY_FIGHTER_4:
+        self->worldW = 240 * PIX_TO_WORLD;
+        self->worldH = 240 * PIX_TO_WORLD;
+        self->radius = 1.2f;
+        self->texture = assets->fighter4;
+        self->remainingLives = 2;
+        self->timeBetweenBullets = 0.15;
+        break;
+
     default:
         assert(false);
         break;
@@ -93,6 +102,14 @@ void Enemy_Update(Enemy *self)
                 self->scene, self->position, velocity_2, BULLET_FIGHTER, 90.0f);
             Scene_AppendBullet(self->scene, bullet_2);
         }
+        else if (self->type == ENEMY_FIGHTER_4)
+        {
+            // Les projectiles partent de bas en haut en balayant l'écran
+         Vec2 velocity = Vec2_Set(-9.0, ((int) g_time->currentTime % 6) - 3);
+         Bullet* bullet = Bullet_New( self->scene, self->position, velocity, BULLET_FIGHTER, 90.0f);
+         Scene_AppendBullet(self->scene, bullet);
+
+        }
 
         self->lastBulletTime = g_time->currentTime;
 
@@ -135,6 +152,16 @@ void Enemy_Update(Enemy *self)
             self->position,
             Vec2_Scale(velocity, Timer_GetDelta(g_time))
         );
+    }
+    else if (self->type == ENEMY_FIGHTER_4)
+    {
+        /*
+        * Mouvement chelou
+        */
+        float Posy = sinf(g_time->currentTime + self->randomStartingTickY);
+        float Posx = sinf(g_time->currentTime + self->randomStartingTickX)*0.5 ;
+        Vec2 velocity = Vec2_Set( Posx, Posy);
+        self->position = Vec2_Add( self->position, Vec2_Scale(velocity, Timer_GetDelta(g_time)));
     }
 }
 

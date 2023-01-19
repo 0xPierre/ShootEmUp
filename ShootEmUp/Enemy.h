@@ -60,6 +60,14 @@ typedef struct Enemy_s
     /// exprimée dans le référentiel monde.
     float worldH;
 
+    /// @brief largeur de la texture du shield
+    /// exprimée dans le référentiel monde.
+    float shieldW;
+
+    /// @brief Hauteur de la texture du shield
+    /// exprimée dans le référentiel monde.
+    float shieldH;
+
     /// @brief Rayon de l'ennemi exprimé dans le référentiel monde.
     /// Il est utilisé dans le moteur physique pour tester les collisions.
     float radius;
@@ -78,6 +86,11 @@ typedef struct Enemy_s
 
     /// quel type de balle on tire
     int lastTypeofBullet;
+
+    /// bouclier
+    int shield;
+    bool IsShieldActivated;
+    int shieldtime;
 
     /// @brief Valeur aléatoire de départ de mouvement en X.
     /// Utilisé pour éviter que les mouvements se ressemblent trop.

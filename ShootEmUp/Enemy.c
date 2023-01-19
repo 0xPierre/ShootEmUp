@@ -29,6 +29,9 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
         self->texture = assets->fighter1;
         self->remainingLives = 1; 
         self->timeBetweenBullets = 1.5;
+        self->IsShieldActivated = false;
+        self->shieldW = 60 * PIX_TO_WORLD;
+        self->shieldH = 60 * PIX_TO_WORLD;
         break;
 
     case ENEMY_FIGHTER_2:
@@ -38,6 +41,9 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
         self->texture = assets->fighter2;
         self->remainingLives = 1;
         self->timeBetweenBullets = 3;
+        self->IsShieldActivated = false;
+        self->shieldW = 60 * PIX_TO_WORLD;
+        self->shieldH = 60 * PIX_TO_WORLD;
         break;
 
     case ENEMY_FIGHTER_3:
@@ -47,6 +53,9 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
         self->texture = assets->fighter3;
         self->remainingLives = 1;
         self->timeBetweenBullets = 1;
+        self->IsShieldActivated = false;
+        self->shieldW = 60 * PIX_TO_WORLD;
+        self->shieldH = 60 * PIX_TO_WORLD;
         break;
 
     case ENEMY_FIGHTER_4:
@@ -56,6 +65,9 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
         self->texture = assets->fighter4;
         self->remainingLives = 2;
         self->timeBetweenBullets = 0.15f;
+        self->IsShieldActivated = false;
+        self->shieldW = 160 * PIX_TO_WORLD;
+        self->shieldH = 160 * PIX_TO_WORLD;
         break;
 
      case ENEMY_FIGHTER_5:
@@ -65,6 +77,9 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
         self->texture = assets->fighter5;
         self->remainingLives = 2;
         self->timeBetweenBullets = 0.5;
+        self->IsShieldActivated = false;
+        self->shieldW = 60 * PIX_TO_WORLD;
+        self->shieldH = 60 * PIX_TO_WORLD;
         break;
 
      case ENEMY_FIGHTER_6:
@@ -75,6 +90,11 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
          self->remainingLives = 2;
          self->timeBetweenBullets = 1.0;
         self-> lastTypeofBullet = 0;
+        self->shield = 5;
+        self->shieldtime = 0;
+        self->IsShieldActivated = false;
+        self->shieldW = 220 * PIX_TO_WORLD;
+        self->shieldH = 220 * PIX_TO_WORLD;
          break;
 
      case ENEMY_FIGHTER_7:
@@ -85,6 +105,9 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
          self->remainingLives = 2;
          self->timeBetweenBullets = 1.0;
          self->lastTypeofBullet = 0;
+         self->IsShieldActivated = false;
+         self->shieldW = 60 * PIX_TO_WORLD;
+         self->shieldH = 60 * PIX_TO_WORLD;
          break;
     default:
         assert(false);
@@ -171,6 +194,7 @@ void Enemy_Update(Enemy *self)
                     Scene_AppendBullet(self->scene, bullet_1);
                 }
                 self->lastTypeofBullet++;
+                self->shield++;
             }
             else 
             {
@@ -184,7 +208,25 @@ void Enemy_Update(Enemy *self)
                     Scene_AppendBullet(self->scene, bullet_2);
                 }
                 self->lastTypeofBullet--;
+                self->shield++;
             }
+            // le shield s'active tous les 10 tirs et reste activé 3 tirs. 
+            if (self->shield == 10)
+            {
+                self->shield = 0;
+                self->IsShieldActivated = true;
+                printf("shield on\n");
+                self->shieldtime = 5;
+                
+            }
+            if (self->shieldtime > 0) self->shieldtime--;
+            if (self->shieldtime == 0)
+            {
+                printf("shield off\n");
+                self->IsShieldActivated = false;
+                
+            }
+            
          
         }
         else if (self->type == ENEMY_FIGHTER_7)
@@ -270,13 +312,34 @@ void Enemy_Render(Enemy *self)
     // On affiche en position dst (unités en pixels)
     SDL_RenderCopyExF(
         renderer, self->texture, NULL, &dst, 90.0f, NULL, 0);
+
+    SDL_FRect dst_shield = { 0 };
+    // Changez 48 par une autre valeur pour grossir ou réduire l'objet
+    dst_shield.h = self->shieldW * scale;
+    dst_shield.w = self->shieldH * scale;
+    Camera_WorldToView(camera, self->position, &dst_shield.x, &dst_shield.y);
+    // Le point de référence est le centre de l'objet
+    dst_shield.x -= 0.50f * dst_shield.w;
+    dst_shield.y -= 0.50f  * dst_shield.h;
+    // On affiche en position dst (unités en pixels)
+    if (self->IsShieldActivated == true)
+    {
+        SDL_RenderCopyExF(
+            renderer, assets->ShieldEnnemy, NULL, &dst_shield, 90.0f, NULL, 0);    
+    }
+    
+    
 }
 
 void Enemy_Damage(Enemy *self, int damage)
 {
-    self->remainingLives--;
+    if (self->IsShieldActivated == false)
+    {
+        self->remainingLives--;
 
-    if (self->remainingLives == 0) {
-        self->state = ENEMY_DEAD;
+        if (self->remainingLives == 0) {
+            self->state = ENEMY_DEAD;
+        }
     }
+    
 }

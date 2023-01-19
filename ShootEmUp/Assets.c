@@ -71,6 +71,8 @@ Assets *Assets_New(SDL_Renderer *renderer)
         { &self->Speed40PowerUpBar, "../Assets/bars/speed40.png"                },
         { &self->Speed40PowerUpBar, "../Assets/bars/speed20.png"                },
         { &self->Speed00PowerUpBar, "../Assets/bars/speed00.png"                },
+        { &self->ShieldEnnemy,       "../Assets/Enemy/SHIELDE.png"                   },
+        { &self->ShieldPlayer,       "../Assets/Player/SHIELDP.png"                   },
     };
     int texSpecCount = sizeof(texSpecs) / sizeof(TextureSpec);
 
@@ -113,6 +115,8 @@ void Assets_Delete(Assets *self)
         &self->layers[1],
         &self->layers[2],
         &self->playerBullet,
+        & self->playerBulletGun1,
+        & self->playerBulletGun2,
         &self->fighter1,
         & self->fighter2,
         & self->fighter3,
@@ -122,6 +126,29 @@ void Assets_Delete(Assets *self)
         & self->fighter7,
         &self->fighterBullet,
         &self->player,
+        & self->player_gun_1,
+        & self->player_gun_2,
+        & self->playerHeart,
+        & self->MenuQuit,
+        & self->MenuStart,
+        & self->CollectableHealth,
+        & self->CollectableSpeed,
+        & self->CollectableBullet1,
+        & self->CollectableBullet2,
+        & self->Gun100PowerUpBar,
+        & self->Gun80PowerUpBar,
+        & self->Gun60PowerUpBar,
+        & self->Gun40PowerUpBar,
+        & self->Gun20PowerUpBar,
+        & self->Gun00PowerUpBar,
+        & self->Speed100PowerUpBar,
+        & self->Speed80PowerUpBar,
+        & self->Speed60PowerUpBar,
+        & self->Speed40PowerUpBar,
+        & self->Speed20PowerUpBar,
+        & self->Speed00PowerUpBar,
+        &self->ShieldEnnemy,
+        & self->ShieldPlayer,
     };
     int count = sizeof(texPointers) / sizeof(SDL_Texture **);
 

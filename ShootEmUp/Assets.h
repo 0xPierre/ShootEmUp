@@ -30,6 +30,11 @@ typedef struct Assets_s
     SDL_Texture* fighter6;
     SDL_Texture* fighter7;
 
+    /// @brief texture des shields.
+
+    SDL_Texture* ShieldEnnemy;
+    SDL_Texture* ShieldPlayer;
+
 
     /// @brief Texture du tir d'un ennemi.
     SDL_Texture *fighterBullet;

@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     // Initialisation
 
     // Initialise la SDL
-    Game_Init(SDL_INIT_VIDEO, IMG_INIT_PNG);
+    Game_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK, IMG_INIT_PNG);
 
     // Crée la fenêtre
     int sdlFlags = 0;

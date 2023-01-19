@@ -16,6 +16,10 @@ typedef struct Menu_s
     /// @brief Stocke l'objet SDL du menu
     SDL_Rect MenuStart;
     SDL_Rect MenuQuit;
+    SDL_Rect MenuAudio;
+
+    /// @brief État de si la musique/les bruits se joue
+    bool isAudioPlaying;
 
     ///@brief Stocke le curseur par défault du joueur
     SDL_Cursor* cursor_default;

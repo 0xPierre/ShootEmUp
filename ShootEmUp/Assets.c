@@ -31,6 +31,14 @@ Assets *Assets_New(SDL_Renderer *renderer)
     self->EnemyBulletSound1 = NULL;
     self->EnemyBulletSound1 = Mix_LoadWAV("../Assets/Audio/EnergyGun_Shoot1A.wav");
 
+    self->MenuClickSound1 = NULL;
+    self->MenuClickSound1 = Mix_LoadWAV("../Assets/Audio/Menu2_SelectA.wav");
+
+    // Gère le volume de la musique et des sons
+    Mix_Volume(-1, SOUND_VOLUME);
+    Mix_VolumeMusic(MUSIC_VOLUME);
+
+
     // -------------------------------------------------------------------------
     // Chargement des textures
 
@@ -54,7 +62,9 @@ Assets *Assets_New(SDL_Renderer *renderer)
         { &self->player_gun_2, "../Assets/Player/P-red-d2.png"                  },
         { &self->playerHeart, "../Assets/Player/heart.png"                      },
         { &self->MenuQuit, "../Assets/Menu/quit2.png"                           },
-        { &self-> MenuStart, "../Assets/Menu/play.png"                          },
+        { &self->MenuStart, "../Assets/Menu/play.png"                           },
+        { &self->MenuSoundOn, "../Assets/Menu/sound on.png"                     },
+        { &self->MenuSoundOff, "../Assets/Menu/sound off.png"                   },
         { &self->CollectableHealth, "../Assets/Collectables/health.png"         },
         { &self->CollectableSpeed, "../Assets/Collectables/speed.png"           },
         { &self->CollectableBullet1, "../Assets/Collectables/bull.png"          },
@@ -71,8 +81,8 @@ Assets *Assets_New(SDL_Renderer *renderer)
         { &self->Speed40PowerUpBar, "../Assets/bars/speed40.png"                },
         { &self->Speed40PowerUpBar, "../Assets/bars/speed20.png"                },
         { &self->Speed00PowerUpBar, "../Assets/bars/speed00.png"                },
-        { &self->ShieldEnnemy,       "../Assets/Enemy/SHIELDE.png"                   },
-        { &self->ShieldPlayer,       "../Assets/Player/SHIELDP.png"                   },
+        { &self->ShieldEnnemy,       "../Assets/Enemy/SHIELDE.png"              },
+        { &self->ShieldPlayer,       "../Assets/Player/SHIELDP.png"             },
     };
     int texSpecCount = sizeof(texSpecs) / sizeof(TextureSpec);
 

@@ -2,6 +2,8 @@
 #include "Common.h"
 #include "Scene.h"
 
+int const JOYSTICK_DEAD_ZONE = 8000;
+
 
 Input *Input_New(Scene *scene)
 {
@@ -9,6 +11,22 @@ Input *Input_New(Scene *scene)
     AssertNew(self);
 
     self->scene = scene;
+    self->gameController = NULL;
+
+    // Regarde si il existe un joystick
+    if (SDL_NumJoysticks() < 1)
+    {
+        printf("No joystick connected\n");
+    }
+    else
+    {
+        printf("Joystick connected\n");
+        self->gameController = SDL_JoystickOpen(0);
+        if (self->gameController == NULL)
+        {
+            printf("Aie erreur, impossible de se co au joystick");
+        }
+    }
 
     return self;
 }
@@ -16,6 +34,10 @@ Input *Input_New(Scene *scene)
 void Input_Delete(Input *self)
 {
     if (!self) return;
+
+    // On libère le joystick
+    SDL_JoystickClose(self->gameController);
+    self->gameController = NULL;
     free(self);
 }
 
@@ -112,9 +134,57 @@ void Input_Update(Input *self)
         case SDL_MOUSEBUTTONUP: {
             int mouseX = evt.button.x;
             int mouseY = evt.button.y;
-
             mouseClickActionIntersectionMenu(mouseX, mouseY, self->scene->menu);
+            break;
         }
+
+        case SDL_JOYAXISMOTION:
+            if (evt.jaxis.which == 0)
+            {
+                if (evt.jaxis.axis == 0)
+                {
+                    if (evt.jaxis.value < -JOYSTICK_DEAD_ZONE)
+                    {
+                        self->hAxis = -4.f;
+                    }
+                    else if (evt.jaxis.value > JOYSTICK_DEAD_ZONE)
+                    {
+                        self->hAxis = 4.f;
+                    }
+                    else {
+                        self->hAxis = 0.f;
+                    }
+                }
+                if (evt.jaxis.axis == 1)
+                {
+                    if (evt.jaxis.value < -JOYSTICK_DEAD_ZONE)
+                    {
+                        self->vAxis = 4.f;
+                    }
+                    else if (evt.jaxis.value > JOYSTICK_DEAD_ZONE)
+                    {
+                        self->vAxis = -4.f;
+                    }
+                    else {
+                        self->vAxis = 0.f;
+                    }
+                }
+            }
+
+            break;
+        case SDL_JOYBUTTONDOWN:
+            switch (evt.jbutton.button)
+            {
+            case 2:
+                self->shootPressed = true;
+                break;
+            case 7:
+                self->shootPressed = true;
+                break;
+            case 9:
+                self->escPressed = true;
+                break;
+            }
             break;
         }
     }

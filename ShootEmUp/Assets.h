@@ -39,15 +39,18 @@ typedef struct Assets_s
     /// @brief Texture du tir d'un ennemi.
     SDL_Texture *fighterBullet;
 
-    /// @brief 
     Mix_Music *backgroundMusic;
 
     Mix_Chunk* PlayerBulletSound;
     Mix_Chunk* EnemyBulletSound1;
 
+    Mix_Chunk* MenuClickSound1;
+
     SDL_Texture* MenuRestart;
     SDL_Texture* MenuStart;
     SDL_Texture* MenuQuit;
+    SDL_Texture* MenuSoundOn;
+    SDL_Texture* MenuSoundOff;
 
     SDL_Texture* CollectableHealth;
     SDL_Texture* CollectableSpeed;

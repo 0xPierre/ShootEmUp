@@ -9,6 +9,7 @@ Menu* Menu_New(Scene *scene)
 
     self->scene = scene;
     self->isOpen = 1;
+    self->isAudioPlaying = true;
 
     self->cursor_default = SDL_GetCursor();
     self->cursor_pointer = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND);
@@ -60,14 +61,29 @@ void Menu_Render(Menu* self)
         * Affichage du bouton Quitter
         */
         int MenuQuitWidth = 287;
-        int menuQuitHeight = 150;
+        int MenuQuitHeight = 150;
 
         self->MenuQuit.x = WINDOW_WIDTH / 2 - MenuQuitWidth / 2;
         self->MenuQuit.y = WINDOW_HEIGHT / 2 - 20;
         self->MenuQuit.w = MenuQuitWidth;
-        self->MenuQuit.h = menuQuitHeight;
+        self->MenuQuit.h = MenuQuitHeight;
         SDL_RenderCopy(scene->renderer, scene->assets->MenuQuit, NULL, &self->MenuQuit);
 
+        /*
+        * Affichage du bouton pour gérer le son
+        */
+        int MenuAudioWidth = 80;
+        int MenuAudioHeight = 80;
+
+        self->MenuAudio.x = 20;
+        self->MenuAudio.y = 15;
+        self->MenuAudio.w = MenuAudioWidth;
+        self->MenuAudio.h = MenuAudioHeight;
+        SDL_RenderCopy(
+            scene->renderer,
+            self->isAudioPlaying ? scene->assets->MenuSoundOn : scene->assets->MenuSoundOff,
+            NULL, &self->MenuAudio
+       );
     }
     changeCursor(self);
 }
@@ -116,6 +132,17 @@ void changeCursor(Menu* self)
     ))
         showCursorPointer = true;
 
+    // Regarde si le curseur pointe sur le bouton Audio
+    else if (isInsideRect(
+        self->MenuAudio.x,
+        self->MenuAudio.y,
+        self->MenuAudio.w,
+        self->MenuAudio.h,
+        mouseX,
+        mouseY
+    ))
+        showCursorPointer = true;
+
 
    // Change le curseur
     if (showCursorPointer)
@@ -146,6 +173,7 @@ void mouseClickActionIntersectionMenu(int mouseX, int mouseY, Menu *self)
         )) {
             self->scene->menu->isOpen = false;
             self->scene->isGameStarted = true;
+            Mix_PlayChannel(-1, self->scene->assets->MenuClickSound1, 0);
         }
 
         // Regarde si le bouton Quitter à été cliqué
@@ -158,6 +186,31 @@ void mouseClickActionIntersectionMenu(int mouseX, int mouseY, Menu *self)
             mouseY
         )) {
             self->scene->input->quitPressed = true;
+            Mix_PlayChannel(-1, self->scene->assets->MenuClickSound1, 0);
+        }
+
+        // Regarde si le bouton Audio à été cliqué
+        else if (isInsideRect(
+            self->MenuAudio.x,
+            self->MenuAudio.y,
+            self->MenuAudio.w,
+            self->MenuAudio.h,
+            mouseX,
+            mouseY
+        )) {
+            // Si il a été cliqué alors on désactive ou active l'audio
+            self->isAudioPlaying = !self->isAudioPlaying;
+
+            if (!self->isAudioPlaying)
+            {
+                Mix_Volume(-1, 0);
+                Mix_VolumeMusic(0);
+            }
+            else {
+                Mix_Volume(-1, SOUND_VOLUME);
+                Mix_VolumeMusic(MUSIC_VOLUME);
+            }
+            Mix_PlayChannel(-1, self->scene->assets->MenuClickSound1, 0);
         }
     }
 }

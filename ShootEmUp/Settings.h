@@ -11,6 +11,9 @@
 //#define FHD
 //#define FULLSCREEN
 
+#define MUSIC_VOLUME 60
+#define SOUND_VOLUME 50
+
 #define PIX_TO_WORLD (1.0f / 48.0f)
 
 #ifdef _WIN32

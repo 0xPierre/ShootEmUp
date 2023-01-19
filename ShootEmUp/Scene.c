@@ -16,7 +16,7 @@ Scene *Scene_New(SDL_Renderer *renderer)
     self->menu = Menu_New(self);
 
     self->hasFirstCollectableBeenSent = false;
-    self->timeBetweenCollectables = 2;
+    self->timeBetweenCollectables = 5;
     self->lastCollectableTime = g_time->currentTime;
     self->collectablesCount = 0;
 

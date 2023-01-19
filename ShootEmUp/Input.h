@@ -31,11 +31,13 @@ typedef struct Input_s
     /// Une valeur négative désigne un déplacement vers le bas.
     /// Une valeur positive désigne un déplacement vers le haut.
     float vAxis;
+
+    SDL_Joystick* gameController;
 } Input;
 
 /// @brief Crée un nouveau gestionnaire des entrées utilisateur.
 /// @return Le gestionnaire créé.
-Input *Input_New();
+Input *Input_New(Scene* scene);
 
 /// @brief Détruit un gestionnaire des entrées utilisateur.
 /// @param self le gestionnaire.

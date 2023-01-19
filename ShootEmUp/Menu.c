@@ -117,7 +117,6 @@ void changeCursor(Menu* self)
         showCursorPointer = true;
 
 
-    printf("setCursor %d\n", showCursorPointer);
    // Change le curseur
     if (showCursorPointer)
     {

@@ -68,7 +68,7 @@ void Input_Update(Input *self)
                 break;
 
             case SDL_SCANCODE_P:
-                // Empêche le player de mourir
+                // Lorsqu'on appuie sur P ou sur la touche du haut du manette ( 1 sur esieabot, triangle sur PS3 ). Le joueur devient invincible
                 self->invincibilityPressed = true;
                 break;
 
@@ -190,7 +190,12 @@ void Input_Update(Input *self)
             case 9:
                 self->escPressed = true;
                 break;
+            // Lorsqu'on appuie sur P ou sur la touche du haut du manette ( 1 sur esieabot, triangle sur PS3 ). Le joueur devient invincible
+            case 0:
+                self->invincibilityPressed = true;
+                break;
             }
+
             break;
         }
     }

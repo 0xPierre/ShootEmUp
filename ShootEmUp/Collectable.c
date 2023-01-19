@@ -111,8 +111,8 @@ void createRandomCollectable(Scene* scene)
     int posY = rand() % ((8 + 1) - 1) + 1;
     Collectable* collectable = Collectable_New(scene, collectableType, Vec2_Set(17, (float)posY));
     
-    scene->collectablesCount++;
     scene->collectables[scene->collectablesCount] = collectable;
+    scene->collectablesCount++;
 }
 
 void manageCollectable(Collectable* collectable)

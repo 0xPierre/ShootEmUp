@@ -90,15 +90,15 @@ void Player_Update(Player *self)
     self->position = possiblePosition;
     
     
-    // On attends que l'animation de mort du joueur soit passé pour passé son état en PLAYER_DEAD
-    if (self->state == PLAYER_DYING)
-    {
-        if (g_time->currentTime - self->isDyingSince >= 1)
-        {
-            self->state = PLAYER_DEAD;
-            printf("Player is DEAD\n");
-        }
-    }
+    //// On attends que l'animation de mort du joueur soit passé pour passé son état en PLAYER_DEAD
+    //if (self->state == PLAYER_DYING)
+    //{
+    //    if (g_time->currentTime - self->isDyingSince >= 1)
+    //    {
+    //        self->state = PLAYER_DEAD;
+    //        printf("Player is DEAD\n");
+    //    }
+    //}
 
     // Gère le tir du joueur
     if (input->shootPressed) {

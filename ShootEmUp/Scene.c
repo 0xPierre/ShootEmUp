@@ -20,6 +20,9 @@ Scene *Scene_New(SDL_Renderer *renderer)
     self->lastCollectableTime = g_time->currentTime;
     self->collectablesCount = 0;
 
+    self->defaultGameOverPosY = 200;
+    self->gameOverPosY = self->defaultGameOverPosY;
+
     self->layer1PosX = 0;
     self->layer2PosX = 0;
 
@@ -46,7 +49,12 @@ void Scene_Delete(Scene *self)
         Bullet_Delete(self->bullets[i]);
         self->bullets[i] = NULL;
     }
-
+    for (int i = 0; i < self->collectablesCount; i++)
+    {
+        Collectable_Delete(self->collectables[i]);
+        self->collectables[i] = NULL;
+    }
+    
     free(self);
 }
 
@@ -235,18 +243,66 @@ void Scene_UpdateLevel(Scene *self)
     }
 }
 
+void startSceneAtLevel(Scene* self, Levels level)
+{
+    Assets* assets = Scene_GetAssets(self);
+    // On supprime les anciennes instances
+    Player_Delete(self->player);
+
+    for (int i = 0; i < self->enemyCount; i++)
+    {
+        Scene_RemoveEnemy(self,  i);
+        self->enemies[i] = NULL;
+    }
+    self->enemyCount = 0;
+
+    for (int i = 0; i < self->bulletCount; i++)
+    {
+        Scene_RemoveBullet(self, i);
+        self->bullets[i] = NULL;
+    }
+    self->bulletCount = 0;
+
+    for (int i = 0; i < self->collectablesCount; i++)
+    {
+        Scene_RemoveCollectable(self, i);
+        self->collectables[i] = NULL;
+    }
+    self->collectablesCount = 0;
+
+    // On remets les position/vie/... par défault
+    self->input = Input_New(self);
+    self->player = Player_New(self);
+
+    self->hasFirstCollectableBeenSent = false;
+    self->timeBetweenCollectables = 5;
+    self->lastCollectableTime = g_time->currentTime;
+    self->collectablesCount = 0;
+    self->gameOverPosY = self->defaultGameOverPosY;
+
+    switch (level)
+    {
+    case LEVEL_1:
+        self->waveIdx = 0;
+        break;
+    case LEVEL_2:
+        self->waveIdx = 5;
+        break;
+    }
+    
+    self->menu->isOpen = false;
+    self->isGameStarted = true;
+}
+
 bool Scene_Update(Scene *self)
 {
     Player *player = self->player;
 
-    // Met à jour le background;
-    //self->layer1-
-
     // Met à jour les entrées utilisateur
     Input_Update(self->input);
 
-    // Mets à jours les éléments seulement quand le menu n'est pas fermé
-    if (self->menu->isOpen)
+    // Mets à jours les éléments seulement quand le menu n'est pas fermé et que le joueur n'est pas mort
+    if (self->menu->isOpen || self->player->state == PLAYER_DYING || self->player->state == PLAYER_DEAD)
     {
         return self->input->quitPressed;
     }
@@ -453,6 +509,10 @@ void Scene_Render(Scene *self)
         Collectables_Bar_Render(self->player);
     }
 
+    // Affichage du GameOver
+    if (self->player->state == PLAYER_DYING || self->player->state == PLAYER_DEAD)
+        GameOver(self);
+
     Menu_Render(self->menu);
 }
 
@@ -532,7 +592,7 @@ void Scene_RemoveBullet(Scene *self, int index)
 void Scene_RemoveCollectable(Scene* self, int index)
 {
     Collectable_Delete(self->collectables[index]);
-    Scene_RemoveObject(index, (void**)(self->collectables), &(self->collectablesCount));
+    Scene_RemoveObject(index, (void **)(self->collectables), &(self->collectablesCount));
 }
 
 void BackGroundLayers_Render(Scene* self)
@@ -541,7 +601,7 @@ void BackGroundLayers_Render(Scene* self)
     SDL_Renderer* renderer = Scene_GetRenderer(self);
     Assets* assets = Scene_GetAssets(self);
     // Vérifie que le menu n'est pas ouvert. Pour que le fond s'anime seulement quand le jeu est joué
-    if (!self->menu->isOpen) {
+    if (!self->menu->isOpen && self->player->state != PLAYER_DEAD) {
         // On récupère la position du layer 1 par rapport au temps
         self->layer1PosX = (self->layer1PosX + Timer_GetDelta(g_time) * 60);
         if (self->layer1PosX >= 1280)
@@ -570,4 +630,56 @@ void BackGroundLayers_Render(Scene* self)
 
     SDL_RenderCopy(renderer, assets->layer1, NULL, &layer1);
     SDL_RenderCopy(renderer, assets->layer2, NULL, &layer2);
+}
+
+void GameOver(Scene* self)
+{
+    SDL_Renderer* renderer = Scene_GetRenderer(self);
+    Assets* assets = Scene_GetAssets(self);
+    SDL_Rect gameOver = { 0 };
+    // Taille du GameOver
+    gameOver.w = 800;
+    gameOver.h = 475;
+
+    gameOver.x = WINDOW_WIDTH / 2 - gameOver.w / 2;
+
+
+    // Si le joueur n'est pas mort ( il est mort mais il y a une petite animation ).
+    if (self->player->state != PLAYER_DEAD)
+    {
+        self->gameOverPosY = self->gameOverPosY - Timer_GetDelta(g_time) * 400.f;
+
+        if ((int)self->gameOverPosY > 0)
+            gameOver.y = (int)self->gameOverPosY;
+        else
+            self->player->state = PLAYER_DEAD;
+    }
+    else {
+        /*
+        * Affichage du bouton Play again
+        */
+        int MenuPlayAgainWidth = 320;
+        int MenuPlayAgainHeight = 84;
+
+        self->menu->MenuPlayAgain.x = WINDOW_WIDTH / 2 - 140;
+        self->menu->MenuPlayAgain.y = gameOver.h - 50;
+        self->menu->MenuPlayAgain.w = MenuPlayAgainWidth;
+        self->menu->MenuPlayAgain.h = MenuPlayAgainHeight;
+        SDL_RenderCopy(self->renderer, assets->MenuPlayAgain, NULL, &self->menu->MenuPlayAgain);
+
+        /*
+        * Affichage du bouton Quitter
+        */
+        int MenuQuitWidth = 287;
+        int MenuQuitHeight = 150;
+
+        self->menu->MenuQuit.x = WINDOW_WIDTH / 2 - MenuQuitWidth / 2 - 10;
+        self->menu->MenuQuit.y = self->menu->MenuPlayAgain.y + self->menu->MenuPlayAgain.h + 20;
+        self->menu->MenuQuit.w = MenuQuitWidth;
+        self->menu->MenuQuit.h = MenuQuitHeight;
+        SDL_RenderCopy(self->renderer, assets->MenuQuit, NULL, &self->menu->MenuQuit);
+    }
+
+
+    SDL_RenderCopy(renderer, assets->GameOver, NULL, &gameOver);
 }

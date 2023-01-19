@@ -17,6 +17,9 @@ typedef struct Menu_s
     SDL_Rect MenuStart;
     SDL_Rect MenuQuit;
     SDL_Rect MenuAudio;
+    SDL_Rect MenuLevel1;
+    SDL_Rect MenuLevel2;
+    SDL_Rect MenuPlayAgain;
 
     /// @brief État de si la musique/les bruits se joue
     bool isAudioPlaying;

@@ -146,17 +146,16 @@ void Enemy_Update(Enemy *self)
         /*
         * Gère les projectiles des ennemis
         */
-        //desactive le shield d'arriver
+
+        // desactive le shield d'arriver
         if (self->shieldtime == 0 )
-        {
-            printf("shield off\n");
             self->IsShieldActivated = false;
          
-        }
         else
         {
             self->shieldtime--;
-            if (self->type != ENEMY_FIGHTER_6) return;
+            if (self->type != ENEMY_FIGHTER_6)
+                return;
         }
         if (self->type == ENEMY_FIGHTER_1 || self->type == ENEMY_FIGHTER_3)
         {

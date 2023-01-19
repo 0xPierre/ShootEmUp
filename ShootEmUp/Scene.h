@@ -20,6 +20,12 @@
 
 #define COLLECTABLE_CAPACITY 50
 
+typedef enum Levels_s
+{
+    LEVEL_1,
+    LEVEL_2
+} Levels;
+
 /// @brief Structure représentant la scène principale du jeu (niveau).
 typedef struct Scene_s
 {
@@ -80,6 +86,10 @@ typedef struct Scene_s
     float layer1PosX;
     float layer2PosX;
 
+    /// @brief Position Y du GameOver label permettant son animation vers Y = 0
+    float gameOverPosY;
+    /// @brief Position par défault Y du GameOver label
+    float defaultGameOverPosY;
 
 } Scene;
 
@@ -128,8 +138,17 @@ void Scene_RemoveEnemy(Scene *self, int index);
 void Scene_RemoveCollectable(Scene* self, int index);
 
 /// @brief Affiche les layers à l'écran.
-/// @arapm self la scène.
+/// @param self la scène.
 void BackGroundLayers_Render(Scene* self);
+
+/// @brief Démarre un Level en réinitialisant tout.
+/// @param self la scène,
+/// @param level le niveau choisit pour démarrer
+void startSceneAtLevel(Scene* self, Levels level);
+
+/// @brief Gère le Game Over d'un niveau.
+/// @param self la scène.
+void GameOver(Scene* self);
 
 /// @brief Renvoie le moteur de rendu de la scène.
 /// @param self la scène.

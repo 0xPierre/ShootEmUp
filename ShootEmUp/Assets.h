@@ -7,7 +7,6 @@
 typedef struct Assets_s
 {
     /// @brief Tableau des différents calques de fond.
-    SDL_Texture *layers[3];
     SDL_Texture* layer1;
     SDL_Texture* layer2;
 
@@ -15,6 +14,9 @@ typedef struct Assets_s
     SDL_Texture* player;
     SDL_Texture* player_gun_1;
     SDL_Texture* player_gun_2;
+
+    // Texture de GameOver
+    SDL_Texture* GameOver;
 
     SDL_Texture* playerHeart;
 
@@ -54,6 +56,9 @@ typedef struct Assets_s
     SDL_Texture* MenuQuit;
     SDL_Texture* MenuSoundOn;
     SDL_Texture* MenuSoundOff;
+    SDL_Texture* MenuLevel1;
+    SDL_Texture* MenuLevel2;
+    SDL_Texture* MenuPlayAgain;
 
     SDL_Texture* CollectableHealth;
     SDL_Texture* CollectableSpeed;

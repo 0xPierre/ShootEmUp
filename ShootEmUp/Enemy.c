@@ -28,10 +28,10 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
         self->worldH = 120 * PIX_TO_WORLD;
         self->radius = 0.4f;
         self->texture = assets->fighter1;
-        self->remainingLives = 1; 
+        self->remainingLives = 2; 
         self->timeBetweenBullets = 1.5;
         self->IsShieldActivated = true;
-        self->shieldtime = 2;
+        self->shieldtime = 1;
         self->shieldW = 60 * PIX_TO_WORLD;
         self->shieldH = 60 * PIX_TO_WORLD;
         self->angleShoot = 90.0f;
@@ -42,10 +42,10 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
         self->worldH = 120 * PIX_TO_WORLD;
         self->radius = 0.4f;
         self->texture = assets->fighter2;
-        self->remainingLives = 1;
+        self->remainingLives = 2;
         self->timeBetweenBullets = 1.5;
         self->IsShieldActivated = true;
-        self->shieldtime = 2;
+        self->shieldtime = 1;
         self->shieldW = 60 * PIX_TO_WORLD;
         self->shieldH = 60 * PIX_TO_WORLD; 
         self->angleShoot = 90.0f;
@@ -56,10 +56,10 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
         self->worldH = 120 * PIX_TO_WORLD;
         self->radius = 0.4f;
         self->texture = assets->fighter3;
-        self->remainingLives = 1;
+        self->remainingLives = 2;
         self->timeBetweenBullets = 1;
         self->IsShieldActivated = true;
-        self->shieldtime = 3;
+        self->shieldtime = 1;
         self->shieldW = 60 * PIX_TO_WORLD;
         self->shieldH = 60 * PIX_TO_WORLD;
         self->angleShoot = 90.0f;
@@ -70,10 +70,10 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
         self->worldH = 240 * PIX_TO_WORLD;
         self->radius = 1.2f;
         self->texture = assets->fighter4;
-        self->remainingLives = 2;
+        self->remainingLives = 10;
         self->timeBetweenBullets = 0.15f;
         self->IsShieldActivated = true;
-        self->shieldtime = 20;
+        self->shieldtime = 12;
         self->shieldW = 160 * PIX_TO_WORLD;
         self->shieldH = 160 * PIX_TO_WORLD;
         self->bulletnum = 0;
@@ -85,10 +85,10 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
         self->worldH = 120 * PIX_TO_WORLD;
         self->radius = 0.4f;
         self->texture = assets->fighter5;
-        self->remainingLives = 2;
+        self->remainingLives = 3;
         self->timeBetweenBullets = 0.5;
         self->IsShieldActivated = true;
-        self->shieldtime = 6;
+        self->shieldtime = 3;
         self->shieldW = 60 * PIX_TO_WORLD;
         self->shieldH = 60 * PIX_TO_WORLD;
         self->angleShoot = 90.0f;
@@ -99,11 +99,11 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
          self->worldH = 240 * PIX_TO_WORLD;
          self->radius = 1.2f;
          self->texture = assets->fighter6;
-         self->remainingLives = 2;
+         self->remainingLives = 15;
          self->timeBetweenBullets = 1.0;
         self-> lastTypeofBullet = 0;
         self->shield = 5;
-        self->shieldtime = 0;
+        self->shieldtime = 1;
         self->IsShieldActivated = false;
         self->shieldW = 220 * PIX_TO_WORLD;
         self->shieldH = 220 * PIX_TO_WORLD;
@@ -119,7 +119,7 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
          self->timeBetweenBullets = 1.0;
          self->lastTypeofBullet = 0;
          self->IsShieldActivated = true;
-         self->shieldtime = 3;
+         self->shieldtime = 1;
          self->shieldW = 60 * PIX_TO_WORLD;
          self->shieldH = 60 * PIX_TO_WORLD;
          self->angleShoot = 0.0f;
@@ -147,13 +147,17 @@ void Enemy_Update(Enemy *self)
         * Gère les projectiles des ennemis
         */
         //desactive le shield d'arriver
-        if (self->shieldtime == 0)
+        if (self->shieldtime == 0 )
         {
             printf("shield off\n");
             self->IsShieldActivated = false;
-
+         
         }
-        else self->shieldtime--;
+        else
+        {
+            self->shieldtime--;
+            if (self->type != ENEMY_FIGHTER_6) return;
+        }
         if (self->type == ENEMY_FIGHTER_1 || self->type == ENEMY_FIGHTER_3)
         {
             // Le projectile part tout droit
@@ -252,6 +256,19 @@ void Enemy_Update(Enemy *self)
                         velocity_2, BULLET_FIGHTER, 90.0f);
                     Scene_AppendBullet(self->scene, bullet_2);
                 }
+                for (int i = 0; i < 12; i++) 
+                {
+                    Vec2 velocity_3 = Vec2_Set(-6, sin((self->bulletnum) ));
+                    Bullet* bullet_3 = Bullet_New(self->scene, self->position, velocity_3, BULLET_FIGHTER3, 90.0f);
+                    Scene_AppendBullet(self->scene, bullet_3);
+                    self->bulletnum++;
+
+                }
+                Vec2 velocity_3= Vec2_Set(-6, sin((self->bulletnum) - 6));
+                Bullet* bullet_3= Bullet_New(self->scene, self->position, velocity_3, BULLET_FIGHTER3, 90.0f);
+                Scene_AppendBullet(self->scene, bullet_3);
+                self->bulletnum++;
+                self->lastTypeofBullet++;
                 self->lastTypeofBullet--;
                 self->shield++;
             }

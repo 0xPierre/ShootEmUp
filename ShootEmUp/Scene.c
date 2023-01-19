@@ -135,6 +135,107 @@ void Scene_UpdateLevel(Scene *self)
 
         self->waveIdx++;
     }
+    else if (self->waveIdx == 5)
+    {
+        Enemy* enemy_1 = Enemy_New(self, ENEMY_FIGHTER_5, Vec2_Set(13.0f, 5.0f));
+        Scene_AppendEnemy(self, enemy_1);
+
+        Enemy* enemy_2 = Enemy_New(self, ENEMY_FIGHTER_5, Vec2_Set(13.0f, 4.0f));
+        Scene_AppendEnemy(self, enemy_2);
+
+        Enemy* enemy_3 = Enemy_New(self, ENEMY_FIGHTER_7, Vec2_Set(14.5f, 2.25f));
+        Scene_AppendEnemy(self, enemy_3);
+
+        Enemy* enemy_4 = Enemy_New(self, ENEMY_FIGHTER_7, Vec2_Set(14.5f, 6.75f));
+        Scene_AppendEnemy(self, enemy_4);
+
+        self->waveIdx++;
+    }
+    else if (self->waveIdx == 6)
+    {
+        Enemy* enemy_1 = Enemy_New(self, ENEMY_FIGHTER_3, Vec2_Set(13.0f, 4.5f));
+        Scene_AppendEnemy(self, enemy_1);
+
+        Enemy* enemy_2 = Enemy_New(self, ENEMY_FIGHTER_3, Vec2_Set(11.5f, 4.5f));
+        Scene_AppendEnemy(self, enemy_2);
+
+        Enemy* enemy_3 = Enemy_New(self, ENEMY_FIGHTER_5, Vec2_Set(14.5f, 4.5f));
+        Scene_AppendEnemy(self, enemy_3);
+
+        Enemy* enemy_4 = Enemy_New(self, ENEMY_FIGHTER_7, Vec2_Set(14.5f, 6.75f));
+        Scene_AppendEnemy(self, enemy_4);
+
+        Enemy* enemy_5 = Enemy_New(self, ENEMY_FIGHTER_7, Vec2_Set(14.5f, 2.25f));
+        Scene_AppendEnemy(self, enemy_5);
+
+        self->waveIdx++;
+    }
+    else if (self->waveIdx == 7)
+    {
+        Enemy* enemy_1 = Enemy_New(self, ENEMY_FIGHTER_1, Vec2_Set(11.5f, 3.0f));
+        Scene_AppendEnemy(self, enemy_1);
+
+        Enemy* enemy_2 = Enemy_New(self, ENEMY_FIGHTER_1, Vec2_Set(11.5f, 6.0f));
+        Scene_AppendEnemy(self, enemy_2);
+
+        Enemy* enemy_3 = Enemy_New(self, ENEMY_FIGHTER_2, Vec2_Set(14.5f, 4.5f));
+        Scene_AppendEnemy(self, enemy_3);
+
+        Enemy* enemy_4 = Enemy_New(self, ENEMY_FIGHTER_7, Vec2_Set(14.5f, 6.75f));
+        Scene_AppendEnemy(self, enemy_4);
+
+        Enemy* enemy_5 = Enemy_New(self, ENEMY_FIGHTER_7, Vec2_Set(14.5f, 2.25f));
+        Scene_AppendEnemy(self, enemy_5);
+
+        Enemy* enemy_6 = Enemy_New(self, ENEMY_FIGHTER_3, Vec2_Set(13.0f, 4.5f));
+        Scene_AppendEnemy(self, enemy_6);
+
+        self->waveIdx++;
+    }
+    else if (self->waveIdx == 8)
+    {
+        Enemy* enemy_1 = Enemy_New(self, ENEMY_FIGHTER_5, Vec2_Set(11.5f, 3.0f));
+        Scene_AppendEnemy(self, enemy_1);
+
+        Enemy* enemy_2 = Enemy_New(self, ENEMY_FIGHTER_5, Vec2_Set(11.5f, 6.0f));
+        Scene_AppendEnemy(self, enemy_2);
+
+        Enemy* enemy_3 = Enemy_New(self, ENEMY_FIGHTER_2, Vec2_Set(14.5f, 5.5f));
+        Scene_AppendEnemy(self, enemy_3);
+
+        Enemy* enemy_4 = Enemy_New(self, ENEMY_FIGHTER_7, Vec2_Set(14.5f, 6.75f));
+        Scene_AppendEnemy(self, enemy_4);
+
+        Enemy* enemy_5 = Enemy_New(self, ENEMY_FIGHTER_7, Vec2_Set(14.5f, 2.25f));
+        Scene_AppendEnemy(self, enemy_5);
+
+        Enemy* enemy_6 = Enemy_New(self, ENEMY_FIGHTER_3, Vec2_Set(13.0f, 4.5f));
+        Scene_AppendEnemy(self, enemy_6);
+
+        Enemy* enemy_7 = Enemy_New(self, ENEMY_FIGHTER_2, Vec2_Set(14.5f, 3.5f));
+        Scene_AppendEnemy(self, enemy_7);
+
+        self->waveIdx++;
+    }
+    else if (self->waveIdx == 9)
+    {
+        Enemy* enemy_1 = Enemy_New(self, ENEMY_FIGHTER_6, Vec2_Set(13.0f, 4.5f));
+        Scene_AppendEnemy(self, enemy_1);
+
+        Enemy* enemy_2 = Enemy_New(self, ENEMY_FIGHTER_7, Vec2_Set(11.5f, 6.75f));
+        Scene_AppendEnemy(self, enemy_2);
+
+        Enemy* enemy_3 = Enemy_New(self, ENEMY_FIGHTER_7, Vec2_Set(11.5f, 2.25f));
+        Scene_AppendEnemy(self, enemy_3);
+
+        Enemy* enemy_4 = Enemy_New(self, ENEMY_FIGHTER_7, Vec2_Set(14.5f, 6.75f));
+        Scene_AppendEnemy(self, enemy_4);
+
+        Enemy* enemy_5 = Enemy_New(self, ENEMY_FIGHTER_7, Vec2_Set(14.5f, 2.25f));
+        Scene_AppendEnemy(self, enemy_5);
+
+        self->waveIdx++;
+    }
 }
 
 bool Scene_Update(Scene *self)

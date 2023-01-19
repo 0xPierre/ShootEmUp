@@ -225,12 +225,6 @@ void Scene_UpdateLevel(Scene *self)
         Enemy* enemy_1 = Enemy_New(self, ENEMY_FIGHTER_6, Vec2_Set(13.0f, 4.5f));
         Scene_AppendEnemy(self, enemy_1);
 
-        Enemy* enemy_2 = Enemy_New(self, ENEMY_FIGHTER_7, Vec2_Set(11.5f, 6.75f));
-        Scene_AppendEnemy(self, enemy_2);
-
-        Enemy* enemy_3 = Enemy_New(self, ENEMY_FIGHTER_7, Vec2_Set(11.5f, 2.25f));
-        Scene_AppendEnemy(self, enemy_3);
-
         Enemy* enemy_4 = Enemy_New(self, ENEMY_FIGHTER_7, Vec2_Set(14.5f, 6.75f));
         Scene_AppendEnemy(self, enemy_4);
 

@@ -82,6 +82,15 @@ typedef struct Player_s
 
     /// @brief Si le joueur est invicible ou non
     bool isInvincible;
+
+    /// @brief État du blouclier
+    bool isShieldActivated;
+
+    /// @brief Durée du bouclier;
+    float shieldDuration;
+
+    /// @brief Temps lorsque le bouclier a été activé pour la dernière fois
+    float shieldActivatedSince;
 } Player;
 
 /// @brief Crée un nouveau joueur.

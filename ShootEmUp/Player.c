@@ -27,6 +27,9 @@ Player *Player_New(Scene *scene)
     self->isGun1PowerUpActivated = false;
     self->isGun2PowerUpActivated = false;
 
+    self->isShieldActivated = false;
+    self->shieldDuration = 2.5;
+
     return self;
 }
 
@@ -150,6 +153,15 @@ void Player_Update(Player *self)
             self->texture = assets->player;
         }
     }
+
+    // On regarde si on doit désactiver le bouclier
+    if (self->isShieldActivated)
+    {
+        if (g_time->currentTime - self->shieldActivatedSince > self->shieldDuration)
+        {
+            self->isShieldActivated = false;
+        }
+    }
 }
 
 void Player_Render(Player *self)
@@ -172,19 +184,50 @@ void Player_Render(Player *self)
     // On affiche en position dst (unités en pixels)
     SDL_RenderCopyExF(
         renderer, self->texture, NULL, &dst, 90.0f, NULL, 0);
+    
+    // Affiche le bouclier lorsqu'il est actif 
+    if (self->isShieldActivated)
+    {
+        SDL_FRect dst_shield = { 0 };
+
+        // La taille du shield est mise en fonction de la texture du player.
+        if (self->isGun1PowerUpActivated || self->isGun2PowerUpActivated)
+        {
+            dst_shield.h = 100 * PIX_TO_WORLD * scale;
+            dst_shield.w = 100 * PIX_TO_WORLD * scale;
+        }
+        else {
+            dst_shield.h = 70 * PIX_TO_WORLD * scale;
+            dst_shield.w = 70 * PIX_TO_WORLD * scale;
+        }
+        Camera_WorldToView(camera, self->position, &dst_shield.x, &dst_shield.y);
+        // Le point de référence est le centre de l'objet
+        dst_shield.x -= 0.50f * dst_shield.w;
+        dst_shield.y -= 0.50f * dst_shield.h;
+
+        SDL_RenderCopyExF(
+            renderer, assets->ShieldPlayer, NULL, &dst_shield, 90.0f, NULL, 0);
+    }
 }
 
 void Player_Damage(Player *self, int damage)
 {
-    if (self->isInvincible)
-        return;
-
     if (self->remainingLives > 0) {
-        self->remainingLives--;
+        // Le joueur perds de la vie seulement quand il n'est pas invicible ( logique non ? ) et qu'il n'a pas de shield
+        if (!self->isInvincible && !self->isShieldActivated)
+            self->remainingLives--;
+
+        // Le joueur meurt si il n'a plus de vie.
         if (self->remainingLives == 0)
         {
             self->state = PLAYER_DYING;
             self->isDyingSince = g_time->currentTime;
+        }
+        // Le joueur reçoit un bouclier seulement si il n'est pas déjà sous bouclier
+        else if (!self->isShieldActivated)
+        {
+            self->shieldActivatedSince = g_time->currentTime;
+            self->isShieldActivated = true;
         }
     }
 }

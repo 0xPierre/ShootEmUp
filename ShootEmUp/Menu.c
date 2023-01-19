@@ -68,8 +68,8 @@ void Menu_Render(Menu* self)
         self->MenuQuit.h = menuQuitHeight;
         SDL_RenderCopy(scene->renderer, scene->assets->MenuQuit, NULL, &self->MenuQuit);
 
-        changeCursor(self);
     }
+    changeCursor(self);
 }
 
 int isInsideRect(int x, int y, int w, int h, int mouseX, int mouseY)
@@ -93,6 +93,7 @@ void changeCursor(Menu* self)
     */
     bool showCursorPointer = false;
 
+    
     // Regarde si le curseur pointe sur le bouton Jouer
     if (isInsideRect(
         self->MenuStart.x,
@@ -116,10 +117,13 @@ void changeCursor(Menu* self)
         showCursorPointer = true;
 
 
+    printf("setCursor %d\n", showCursorPointer);
    // Change le curseur
     if (showCursorPointer)
     {
-        SDL_SetCursor(self->cursor_pointer);
+        // Vérifie que le menu est bien ouvert
+        if (self->isOpen)
+            SDL_SetCursor(self->cursor_pointer);
     }
     else
     {
@@ -129,28 +133,32 @@ void changeCursor(Menu* self)
 
 void mouseClickActionIntersectionMenu(int mouseX, int mouseY, Menu *self)
 {
-    // Regarde si le bouton joué a été cliqué
-    if (isInsideRect(
-        self->MenuStart.x,
-        self->MenuStart.y,
-        self->MenuStart.w,
-        self->MenuStart.h,
-        mouseX,
-        mouseY
-    )) {
-        self->scene->menu->isOpen = false;
-        self->scene->isGameStarted = true;
-    }
+    // Vérifie que le menu est bien ouvert
+    if (self->isOpen)
+    {
+        // Regarde si le bouton joué a été cliqué
+        if (isInsideRect(
+            self->MenuStart.x,
+            self->MenuStart.y,
+            self->MenuStart.w,
+            self->MenuStart.h,
+            mouseX,
+            mouseY
+        )) {
+            self->scene->menu->isOpen = false;
+            self->scene->isGameStarted = true;
+        }
 
-    // Regarde si le bouton Quitter à été cliqué
-    else if (isInsideRect(
-        self->MenuQuit.x,
-        self->MenuQuit.y,
-        self->MenuQuit.w,
-        self->MenuQuit.h,
-        mouseX,
-        mouseY
-    )) {
-        self->scene->input->quitPressed = true;
+        // Regarde si le bouton Quitter à été cliqué
+        else if (isInsideRect(
+            self->MenuQuit.x,
+            self->MenuQuit.y,
+            self->MenuQuit.w,
+            self->MenuQuit.h,
+            mouseX,
+            mouseY
+        )) {
+            self->scene->input->quitPressed = true;
+        }
     }
 }

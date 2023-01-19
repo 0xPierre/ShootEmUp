@@ -79,6 +79,9 @@ typedef struct Player_s
 
     /// @brief Durée d'activation du powerup vitesse
     float gun2PowerUpDuration;
+
+    /// @brief Si le joueur est invicible ou non
+    bool isInvincible;
 } Player;
 
 /// @brief Crée un nouveau joueur.

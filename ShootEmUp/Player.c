@@ -41,8 +41,12 @@ void Player_Update(Player *self)
     // On récupère des infos essentielles (communes à tout objet)
     Scene* scene = self->scene;
     Input* input = Scene_GetInput(scene);
-    // Mise à jour de la vitesse en fonction de l'état des touches
-  
+
+    if (input->invincibilityPressed)
+    {
+        self->isInvincible = !self->isInvincible;
+    }
+
     // Lorsque que PowerUp est activé, on double la vitesse
     if (self->isSpeedPowerUpActivated)
     {
@@ -172,6 +176,9 @@ void Player_Render(Player *self)
 
 void Player_Damage(Player *self, int damage)
 {
+    if (self->isInvincible)
+        return;
+
     if (self->remainingLives > 0) {
         self->remainingLives--;
         if (self->remainingLives == 0)

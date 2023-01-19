@@ -16,6 +16,9 @@ typedef struct Input_s
     /// @brief Booléen indiquant si la touche de tir vient d'être pressée.
     bool shootPressed;
 
+    /// @brief Booléen indiquant si la touche toggelant l'invicibilité vient d'être pressée.
+    bool invincibilityPressed;
+
     /// @brief Nombre indiquant le déplacement horizontal du joueur.
     /// Les valeurs pour un clavier ou un joystick sont dans l'intervalle
     /// [-1.0f, 1.0f].

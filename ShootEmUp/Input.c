@@ -46,6 +46,7 @@ void Input_Update(Input *self)
     self->escPressed = false;
     self->quitPressed = false;
     self->shootPressed = false;
+    self->invincibilityPressed = false;
 
     SDL_Event evt;
     while (SDL_PollEvent(&evt))
@@ -64,6 +65,11 @@ void Input_Update(Input *self)
             {
             case SDL_SCANCODE_ESCAPE:
                 self->escPressed = true;
+                break;
+
+            case SDL_SCANCODE_P:
+                // Empêche le player de mourir
+                self->invincibilityPressed = true;
                 break;
 
             case SDL_SCANCODE_RIGHT:

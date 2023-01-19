@@ -48,6 +48,20 @@ typedef struct Assets_s
     SDL_Texture* CollectableSpeed;
     SDL_Texture* CollectableBullet1;
     SDL_Texture* CollectableBullet2;
+
+    SDL_Texture* Gun100PowerUpBar;
+    SDL_Texture* Gun80PowerUpBar;
+    SDL_Texture* Gun60PowerUpBar;
+    SDL_Texture* Gun40PowerUpBar;
+    SDL_Texture* Gun20PowerUpBar;
+    SDL_Texture* Gun00PowerUpBar;
+
+    SDL_Texture* Speed100PowerUpBar;
+    SDL_Texture* Speed80PowerUpBar;
+    SDL_Texture* Speed60PowerUpBar;
+    SDL_Texture* Speed40PowerUpBar;
+    SDL_Texture* Speed20PowerUpBar;
+    SDL_Texture* Speed00PowerUpBar;
 } Assets;
 
 /// @brief Crée la structure contenant les assets du jeu.

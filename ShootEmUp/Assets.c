@@ -59,6 +59,18 @@ Assets *Assets_New(SDL_Renderer *renderer)
         { &self->CollectableSpeed, "../Assets/Collectables/speed.png"           },
         { &self->CollectableBullet1, "../Assets/Collectables/bull.png"          },
         { &self->CollectableBullet2, "../Assets/Collectables/rocket.png"        },
+        { &self->Gun100PowerUpBar, "../Assets/bars/gun100.png"                  },
+        { &self->Gun80PowerUpBar, "../Assets/bars/gun80.png"                    },
+        { &self->Gun60PowerUpBar, "../Assets/bars/gun60.png"                    },
+        { &self->Gun40PowerUpBar, "../Assets/bars/gun40.png"                    },
+        { &self->Gun20PowerUpBar, "../Assets/bars/gun20.png"                    },
+        { &self->Gun00PowerUpBar, "../Assets/bars/gun00.png"                    },
+        { &self->Speed100PowerUpBar, "../Assets/bars/speed100.png"              },
+        { &self->Speed80PowerUpBar, "../Assets/bars/speed80.png"                },
+        { &self->Speed60PowerUpBar, "../Assets/bars/speed60.png"                },
+        { &self->Speed40PowerUpBar, "../Assets/bars/speed40.png"                },
+        { &self->Speed40PowerUpBar, "../Assets/bars/speed20.png"                },
+        { &self->Speed00PowerUpBar, "../Assets/bars/speed00.png"                },
     };
     int texSpecCount = sizeof(texSpecs) / sizeof(TextureSpec);
 

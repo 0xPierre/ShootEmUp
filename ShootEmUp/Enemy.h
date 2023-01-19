@@ -72,6 +72,11 @@ typedef struct Enemy_s
     /// Il est utilisé dans le moteur physique pour tester les collisions.
     float radius;
 
+    // rotation afin que l'ennemçis sois orienté avec sont tir
+    float angleShoot;
+
+
+
     /// @brief Nombre de vie restant de l'ennemi.
     /// Utilisé lorsque l'ennemi se prends un projectil.
     int remainingLives;

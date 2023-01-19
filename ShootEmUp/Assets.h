@@ -38,6 +38,7 @@ typedef struct Assets_s
 
     /// @brief Texture du tir d'un ennemi.
     SDL_Texture *fighterBullet;
+    SDL_Texture* fighterBullet2;
 
     Mix_Music *backgroundMusic;
 

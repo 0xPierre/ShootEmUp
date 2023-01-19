@@ -80,6 +80,8 @@ typedef struct Enemy_s
     /// Utilisé lorsque l'ennemi s'update.
     float timeBetweenBullets;
 
+    //nombre de bullet
+    int bulletnum;
     /// @brief Ecart de temps entre chaque projectil.
     /// Utilisé lorsque l'ennemi s'update.
     float lastBulletTime;

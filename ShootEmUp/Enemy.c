@@ -68,6 +68,7 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
         self->IsShieldActivated = false;
         self->shieldW = 160 * PIX_TO_WORLD;
         self->shieldH = 160 * PIX_TO_WORLD;
+        self->bulletnum = 0;
         break;
 
      case ENEMY_FIGHTER_5:
@@ -155,10 +156,31 @@ void Enemy_Update(Enemy *self)
         }
         else if (self->type == ENEMY_FIGHTER_4)
         {
-            // Les projectiles partent de bas en haut en balayant l'écran
-         Vec2 velocity = Vec2_Set(-9.0, (float)((int) g_time->currentTime % 6) - 3);
-         Bullet* bullet = Bullet_New( self->scene, self->position, velocity, BULLET_FIGHTER, 90.0f);
+            
+          // Les projectiles partent de bas en haut en balayant l'écran
+         Vec2 velocity = Vec2_Set(-5.0, (float)((int) g_time->currentTime % 6) - 3);
+         Bullet* bullet = Bullet_New( self->scene, self->position, velocity, BULLET_FIGHTER2, 90.0f);
          Scene_AppendBullet(self->scene, bullet);
+         
+             
+         if (self->lastTypeofBullet ==0)
+         {
+             Vec2 velocity_1 = Vec2_Set(-6, (self->bulletnum % 12) - 6);
+             Bullet* bullet_1 = Bullet_New(self->scene, self->position, velocity_1, BULLET_FIGHTER, 90.0f);
+             Scene_AppendBullet(self->scene, bullet_1);
+             self->bulletnum++;
+             self->lastTypeofBullet++;
+         }
+         
+         if (self->lastTypeofBullet == 1)
+         {
+             Vec2 velocity_2 = Vec2_Set(-6, -((self->bulletnum % 12) - 6));
+             Bullet* bullet_2 = Bullet_New(self->scene, self->position, velocity_2, BULLET_FIGHTER, 90.0f);
+             Scene_AppendBullet(self->scene, bullet_2);
+             self->bulletnum++;
+             self->lastTypeofBullet--;
+         }
+
 
         }
         else if (self->type == ENEMY_FIGHTER_5)
@@ -313,6 +335,7 @@ void Enemy_Render(Enemy *self)
     SDL_RenderCopyExF(
         renderer, self->texture, NULL, &dst, 90.0f, NULL, 0);
 
+    //Le shield des enemis
     SDL_FRect dst_shield = { 0 };
     // Changez 48 par une autre valeur pour grossir ou réduire l'objet
     dst_shield.h = self->shieldW * scale;

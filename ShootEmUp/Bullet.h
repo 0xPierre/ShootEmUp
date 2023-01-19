@@ -13,6 +13,8 @@ typedef enum BulletType_e
 
     /// @brief Projectile normal provenant d'un ennemi.
     BULLET_FIGHTER,
+    // projectile vert ennemi
+    BULLET_FIGHTER2,
 } BulletType;
 
 /// @brief Structure représentant un projectile.

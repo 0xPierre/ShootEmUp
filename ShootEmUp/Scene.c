@@ -20,6 +20,9 @@ Scene *Scene_New(SDL_Renderer *renderer)
     self->lastCollectableTime = g_time->currentTime;
     self->collectablesCount = 0;
 
+    self->layer1PosX = 0;
+    self->layer2PosX = 0;
+
     return self;
 }
 
@@ -413,12 +416,11 @@ bool Scene_Update(Scene *self)
 
 void Scene_Render(Scene *self)
 {
-    // Affichage du fond
     SDL_Renderer *renderer = Scene_GetRenderer(self);
     Assets *assets = Scene_GetAssets(self);
-    SDL_RenderCopy(renderer, assets->layers[0], NULL, NULL);
-    SDL_RenderCopy(renderer, assets->layers[1], NULL, NULL);
-    SDL_RenderCopy(renderer, assets->layers[2], NULL, NULL);
+
+    // Affichage du fond
+    BackGroundLayers_Render(self);
 
     // On affiche le jeu seulement quand la partie a commencé
     if (self->isGameStarted)
@@ -537,4 +539,41 @@ void Scene_RemoveCollectable(Scene* self, int index)
 {
     Collectable_Delete(self->collectables[index]);
     Scene_RemoveObject(index, (void**)(self->collectables), &(self->collectablesCount));
+}
+
+void BackGroundLayers_Render(Scene* self)
+{
+
+    SDL_Renderer* renderer = Scene_GetRenderer(self);
+    Assets* assets = Scene_GetAssets(self);
+    // Vérifie que le menu n'est pas ouvert. Pour que le fond s'anime seulement quand le jeu est joué
+    if (!self->menu->isOpen) {
+        // On récupère la position du layer 1 par rapport au temps
+        self->layer1PosX = (self->layer1PosX + Timer_GetDelta(g_time) * 60);
+        if (self->layer1PosX >= 1280)
+            self->layer1PosX = 0;
+
+        // On récupère la position du layer 2 par rapport au temps
+        self->layer2PosX = (self->layer2PosX + Timer_GetDelta(g_time) * 120);
+        if (self->layer2PosX >= 1280) {
+            self->layer2PosX = 0;
+        }
+    }
+    SDL_Rect layer1 = { 0 };
+    // négatif car on décale vers la gauche
+    layer1.x = -(int)self->layer1PosX;
+    layer1.y = 0;
+    // Taille du layer
+    layer1.w = 2560;
+    layer1.h = 720;
+
+    SDL_Rect layer2 = { 0 };
+    // négatif car on décale vers la gauche
+    layer2.x = -(int)self->layer2PosX;
+    layer2.y = 0;
+    layer2.w = 2560;
+    layer2.h = 640;
+
+    SDL_RenderCopy(renderer, assets->layer1, NULL, &layer1);
+    SDL_RenderCopy(renderer, assets->layer2, NULL, &layer2);
 }

@@ -8,6 +8,8 @@ typedef struct Assets_s
 {
     /// @brief Tableau des différents calques de fond.
     SDL_Texture *layers[3];
+    SDL_Texture* layer1;
+    SDL_Texture* layer2;
 
     /// @brief Texture du vaisseau du joueur.
     SDL_Texture* player;
@@ -31,7 +33,6 @@ typedef struct Assets_s
     SDL_Texture* fighter7;
 
     /// @brief texture des shields.
-
     SDL_Texture* ShieldEnnemy;
     SDL_Texture* ShieldPlayer;
 

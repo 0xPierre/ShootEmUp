@@ -46,6 +46,8 @@ Assets *Assets_New(SDL_Renderer *renderer)
         { &self->layers[0],     "../Assets/Background/bg1.png"                  },
         { &self->layers[1],     "../Assets/Background/bg2.png"                  },
         { &self->layers[2],     "../Assets/Background/bg3.png"                  },
+        { &self->layer1,     "../Assets/Background/bg11.png"                    },
+        { &self->layer2,     "../Assets/Background/bg12.png"                    },
         { &self->playerBullet,  "../Assets/Bullet/bulletp.png"                  },
         { &self->playerBulletGun1,  "../Assets/Bullet/bullet_gun_1.png"         },
         { &self->playerBulletGun2,  "../Assets/Bullet/bullet_gun_2.png"         },

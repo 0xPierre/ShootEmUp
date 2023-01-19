@@ -77,9 +77,8 @@ typedef struct Scene_s
     bool hasFirstCollectableBeenSent;
 
     /// @brief Position X des couches du bg
-    SDL_Rect layer1;
-    SDL_Rect layer2;
-    SDL_Rect layer3;
+    float layer1PosX;
+    float layer2PosX;
 
 
 } Scene;
@@ -127,6 +126,10 @@ void Scene_RemoveEnemy(Scene *self, int index);
 /// @param self la scène.
 /// @param index l'indice du collectable à supprimer dans le tableau self->collectables.
 void Scene_RemoveCollectable(Scene* self, int index);
+
+/// @brief Affiche les layers à l'écran.
+/// @arapm self la scène.
+void BackGroundLayers_Render(Scene* self);
 
 /// @brief Renvoie le moteur de rendu de la scène.
 /// @param self la scène.

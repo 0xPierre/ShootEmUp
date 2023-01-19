@@ -31,6 +31,13 @@ Bullet *Bullet_New(Scene *scene, Vec2 position, Vec2 velocity, int type, float a
         self->fromPlayer = false;
         self->texture = assets->fighterBullet2;
         break;
+    case BULLET_FIGHTER3:
+        self->worldW = 18 * PIX_TO_WORLD;
+        self->worldH = 16 * PIX_TO_WORLD;
+        self->radius = 0.1f;
+        self->fromPlayer = false;
+        self->texture = assets->fighterBullet3;
+        break;
     default:
     case BULLET_PLAYER:
         self->texture = assets->playerBullet;

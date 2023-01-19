@@ -15,6 +15,8 @@ typedef enum BulletType_e
     BULLET_FIGHTER,
     // projectile vert ennemi
     BULLET_FIGHTER2,
+    // projectile violet ennemi
+    BULLET_FIGHTER3,
 } BulletType;
 
 /// @brief Structure représentant un projectile.

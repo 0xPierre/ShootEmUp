@@ -132,7 +132,6 @@ void Player_Update(Player *self)
     }
 
     // Gère les PowerUp de canon
-
     if (self->isGun1PowerUpActivated)
     {
         // On regarde si on doit désactiver le canon 1

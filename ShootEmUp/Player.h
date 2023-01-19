@@ -102,3 +102,11 @@ void Player_Render(Player *self);
 /// @param self le joueur.
 /// @param damage la quantité de dommages (nombre de points de vie à perdre).
 void Player_Damage(Player *self, int damage);
+
+/// @brief Dessine les coeurs du joueur dans le moteur de rendu
+/// @param self le joueur
+void Heart_Render(Player* self);
+
+/// @brief Dessine les bar des collectables du joueur dans le temps, dans le moteur de rendu ( vie, gun... )
+/// @param self le joueur
+void Collectables_Bar_Render(Player* self);

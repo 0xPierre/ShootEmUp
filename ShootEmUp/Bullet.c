@@ -34,6 +34,7 @@ Bullet *Bullet_New(Scene *scene, Vec2 position, Vec2 velocity, int type, float a
             self->worldW = 15 * PIX_TO_WORLD;
             self->worldH = 15 * PIX_TO_WORLD;
             self->texture = assets->playerBulletGun1;
+            self->radius = 0.08;
         }
         else if (scene->player->isGun2PowerUpActivated)
         {
@@ -41,14 +42,15 @@ Bullet *Bullet_New(Scene *scene, Vec2 position, Vec2 velocity, int type, float a
             self->worldH = 26 * PIX_TO_WORLD;
             self->texture = assets->playerBulletGun2;
             self->angle = 90;
+            self->radius = 0.1f;
         }
         else
         {
             self->worldW = 8 * PIX_TO_WORLD;
             self->worldH = 16 * PIX_TO_WORLD;
             self->texture = assets->playerBullet;
+            self->radius = 0.05f;
         }
-        self->radius = 0.05f;
         self->fromPlayer = true;
         break;
     }

@@ -102,12 +102,12 @@ void Player_Update(Player *self)
             Bullet* bullet_1 = Bullet_New(
                 self->scene,
                 // Le + 0.8 permet de déplacer la position de départ du projectile pour éviter qu'il apparaissent en dessous du player.
-                Vec2_Set(self->position.x + 0.8, self->position.y + 0.4),
+                Vec2_Set(self->position.x + 0.8f, self->position.y + 0.4f),
                 velocity, BULLET_PLAYER, 90.0f);
 
             Bullet* bullet_2 = Bullet_New(
                 self->scene,
-                Vec2_Set(self->position.x + 0.8, self->position.y - 0.4),
+                Vec2_Set(self->position.x + 0.8f, self->position.y - 0.4f),
                 velocity, BULLET_PLAYER, 90.0f);
 
             Scene_AppendBullet(self->scene, bullet_1);
@@ -159,7 +159,6 @@ void Player_Render(Player *self)
     // en tuiles, la taille de la fenêtre et la taille des textures.
     float scale = Camera_GetWorldToViewScale(camera);
     SDL_FRect dst = { 0 };
-    // Changez 48 par une autre valeur pour grossir ou réduire l'objet
     dst.h = 120 * PIX_TO_WORLD * scale;
     dst.w = 120 * PIX_TO_WORLD * scale;
     Camera_WorldToView(camera, self->position, &dst.x, &dst.y);
@@ -173,10 +172,144 @@ void Player_Render(Player *self)
 
 void Player_Damage(Player *self, int damage)
 {
-    self->remainingLives--;
-    if (self->remainingLives == 0)
+    if (self->remainingLives > 0) {
+        self->remainingLives--;
+        if (self->remainingLives == 0)
+        {
+            self->state = PLAYER_DYING;
+            self->isDyingSince = g_time->currentTime;
+        }
+    }
+}
+
+void Heart_Render(Player* self)
+{
+    // On récupère des infos essentielles (communes à tout objet)
+    Scene* scene = self->scene;
+    SDL_Renderer* renderer = Scene_GetRenderer(scene);
+    Assets* assets = Scene_GetAssets(scene);
+    Camera* camera = Scene_GetCamera(scene);
+    // On calcule la position en pixels en fonction de la position
+    // en tuiles, la taille de la fenêtre et la taille des textures.
+    float scale = Camera_GetWorldToViewScale(camera);
+
+    for (int i = 0; i < self->remainingLives; i++)
     {
-        self->state = PLAYER_DYING;
-        self->isDyingSince = g_time->currentTime;
+        SDL_FRect dst = { 0 };
+        dst.h = 0.5f * scale;
+        dst.w = 0.5f * scale;
+        Camera_WorldToView(camera, Vec2_Set(.5f+i*0.6f, 0.5f), &dst.x, &dst.y);
+        // Le point de référence est le centre de l'objet
+        dst.x -= 0.50f * dst.w;
+        dst.y -= 0.50f * dst.h;
+        // On affiche en position dst (unités en pixels)
+        SDL_RenderCopyExF(
+            renderer, assets->playerHeart, NULL, &dst, 0.0f, NULL, 0);
+    }
+}
+
+void Collectables_Bar_Render(Player* self)
+{
+    // On récupère des infos essentielles (communes à tout objet)
+    Scene* scene = self->scene;
+    SDL_Renderer* renderer = Scene_GetRenderer(scene);
+    Assets* assets = Scene_GetAssets(scene);
+    Camera* camera = Scene_GetCamera(scene);
+    // On calcule la position en pixels en fonction de la position
+    // en tuiles, la taille de la fenêtre et la taille des textures.
+    float scale = Camera_GetWorldToViewScale(camera);
+
+    if (self->isGun1PowerUpActivated || self->isGun2PowerUpActivated) {
+        SDL_Texture* gun1Texture;
+        int percentage;
+        // Récupère le pourcentage d'utilisation en fonction du power up utilisé ( gun 1 ou gun 2 )
+        if (self->isGun1PowerUpActivated)
+            percentage = 100.f-(g_time->currentTime - self->gun1PowerUpActivatedSince) * 100 / self->gun1PowerUpDuration;
+        else
+            percentage = 100.f - (g_time->currentTime - self->gun2PowerUpActivatedSince) * 100 / self->gun2PowerUpDuration;
+        /// Choix de la texture de la bar
+        if (percentage > 80)
+        {
+            gun1Texture = assets->Gun100PowerUpBar;
+        }
+        else if (percentage > 60)
+        {
+            gun1Texture = assets->Gun80PowerUpBar;
+        }
+        else if (percentage > 40)
+        {
+            gun1Texture = assets->Gun60PowerUpBar;
+        }
+        else if (percentage > 20)
+        {
+            gun1Texture = assets->Gun40PowerUpBar;
+        }
+        else if (percentage > 5)
+        {
+            gun1Texture = assets->Gun20PowerUpBar;
+        }
+        else
+        {
+            gun1Texture = assets->Gun00PowerUpBar;
+        }
+
+        SDL_FRect dst = { 0 };
+        dst.h = 35 * PIX_TO_WORLD * scale;
+        dst.w = 100 * PIX_TO_WORLD * scale;
+        Camera_WorldToView(camera, Vec2_Set(.5, 1), &dst.x, &dst.y);
+        // Le point de référence est le centre de l'objet
+        dst.x = 0.10f * dst.w;
+        dst.y -= .95f * dst.h;
+        // On affiche en position dst (unités en pixels)
+        SDL_RenderCopyExF(renderer, gun1Texture, NULL, &dst, 0.0f, NULL, 0);
+    }
+    
+    if (self->isSpeedPowerUpActivated)
+    {
+        SDL_Texture* speedTexture;
+        // Récupère le pourcentage d'utilisation du powerup vitesse
+        int percentage = 100.f - (
+            g_time->currentTime - self->speedPowerUpActivatedSince
+           ) * 100 / self->speedPowerUpDuration;
+
+        /// Choix de la texture de la bar
+        if (percentage > 80)
+        {
+            speedTexture = assets->Speed100PowerUpBar;
+        }
+        else if (percentage > 60)
+        {
+            speedTexture = assets->Speed80PowerUpBar;
+        }
+        else if (percentage > 40)
+        {
+            speedTexture = assets->Speed60PowerUpBar;
+        }
+        else if (percentage > 20)
+        {
+            speedTexture = assets->Speed40PowerUpBar;
+        }
+        else if (percentage > 5)
+        {
+            speedTexture = assets->Speed20PowerUpBar;
+        }
+        else
+        {
+            speedTexture = assets->Speed00PowerUpBar;
+        }
+
+        SDL_FRect dst = { 0 };
+        dst.h = 35 * PIX_TO_WORLD * scale;
+        dst.w = 100 * PIX_TO_WORLD * scale;
+        Camera_WorldToView(camera, Vec2_Set(.5, 1), &dst.x, &dst.y);
+        // Le point de référence est le centre de l'objet
+        dst.x = 0.10f * dst.w;
+        dst.y -= 0.95f * dst.h;
+        // Si le powerup gun 1 ou gun 2 est déjà activé, alors la hauteur de la bar est plus élevé ( là c négatif psk voilà )
+        if (self->isGun1PowerUpActivated || self->isGun2PowerUpActivated)
+            dst.y -= 1.f * dst.h;
+
+        // On affiche en position dst (unités en pixels)
+        SDL_RenderCopyExF(renderer, speedTexture, NULL, &dst, 0.0f, NULL, 0);
     }
 }

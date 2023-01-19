@@ -73,8 +73,14 @@ typedef struct Scene_s
     /// @brief Temps entre chaque collectables
     float timeBetweenCollectables;
 
-    /// @brief
+    /// @brief Pose pas dquestion
     bool hasFirstCollectableBeenSent;
+
+    /// @brief Position X des couches du bg
+    SDL_Rect layer1;
+    SDL_Rect layer2;
+    SDL_Rect layer3;
+
 
 } Scene;
 

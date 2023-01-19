@@ -16,7 +16,7 @@ Scene *Scene_New(SDL_Renderer *renderer)
     self->menu = Menu_New(self);
 
     self->hasFirstCollectableBeenSent = false;
-    self->timeBetweenCollectables = 5;
+    self->timeBetweenCollectables = 2;
     self->lastCollectableTime = g_time->currentTime;
     self->collectablesCount = 0;
 
@@ -109,6 +109,9 @@ void Scene_UpdateLevel(Scene *self)
 bool Scene_Update(Scene *self)
 {
     Player *player = self->player;
+
+    // Met à jour le background;
+    //self->layer1-
 
     // Met à jour les entrées utilisateur
     Input_Update(self->input);
@@ -314,6 +317,12 @@ void Scene_Render(Scene *self)
 
         // Affichage du joueur
         Player_Render(self->player);
+
+        // Affichage des coeurs
+        Heart_Render(self->player);
+
+        // Affichage des bar de powerup
+        Collectables_Bar_Render(self->player);
     }
 
     Menu_Render(self->menu);

@@ -34,6 +34,12 @@ Assets *Assets_New(SDL_Renderer *renderer)
     self->MenuClickSound1 = NULL;
     self->MenuClickSound1 = Mix_LoadWAV("../Assets/Audio/Menu2_SelectA.wav");
 
+    self->EnemyDeath = NULL;
+    self->EnemyDeath = Mix_LoadWAV("../Assets/Audio/enemydeath.mp3");
+
+    self->PlayerDeath = NULL;
+    self->PlayerDeath = Mix_LoadWAV("../Assets/Audio/playerdeath.mp3");
+
     // Gère le volume de la musique et des sons
     Mix_Volume(-1, SOUND_VOLUME);
     Mix_VolumeMusic(MUSIC_VOLUME);

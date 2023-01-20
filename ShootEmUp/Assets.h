@@ -18,6 +18,7 @@ typedef struct Assets_s
     // Texture de GameOver
     SDL_Texture* GameOver;
 
+    //texture des coeurs
     SDL_Texture* playerHeart;
 
     /// @brief Texture du tir du joueur.
@@ -44,13 +45,21 @@ typedef struct Assets_s
     SDL_Texture* fighterBullet2;
     SDL_Texture* fighterBullet3;
 
+    // musique du jeu
     Mix_Music *backgroundMusic;
 
+    // son des tir allié et ennemis
     Mix_Chunk* PlayerBulletSound;
     Mix_Chunk* EnemyBulletSound1;
 
+    // son des mort allié et ennemis
+    Mix_Chunk* EnemyDeath;
+    Mix_Chunk* PlayerDeath;
+
+    // son du menu
     Mix_Chunk* MenuClickSound1;
 
+    //texture du menu
     SDL_Texture* MenuRestart;
     SDL_Texture* MenuStart;
     SDL_Texture* MenuQuit;
@@ -61,11 +70,13 @@ typedef struct Assets_s
     SDL_Texture* MenuPlayAgain;
     SDL_Texture* MenuSelector;
 
+    //texture des collectables
     SDL_Texture* CollectableHealth;
     SDL_Texture* CollectableSpeed;
     SDL_Texture* CollectableBullet1;
     SDL_Texture* CollectableBullet2;
 
+    //texture de la barre de durée du power-up d'attaque
     SDL_Texture* Gun100PowerUpBar;
     SDL_Texture* Gun80PowerUpBar;
     SDL_Texture* Gun60PowerUpBar;
@@ -73,6 +84,7 @@ typedef struct Assets_s
     SDL_Texture* Gun20PowerUpBar;
     SDL_Texture* Gun00PowerUpBar;
 
+    //texture de la barre de durée du power-up de vitesse
     SDL_Texture* Speed100PowerUpBar;
     SDL_Texture* Speed80PowerUpBar;
     SDL_Texture* Speed60PowerUpBar;

@@ -28,7 +28,7 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
         self->worldH = 120 * PIX_TO_WORLD;
         self->radius = 0.4f;
         self->texture = assets->fighter1;
-        self->remainingLives = 2; 
+        self->remainingLives = 4; 
         self->timeBetweenBullets = 1.5;
         self->IsShieldActivated = true;
         self->shieldtime = 1;
@@ -42,7 +42,7 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
         self->worldH = 120 * PIX_TO_WORLD;
         self->radius = 0.4f;
         self->texture = assets->fighter2;
-        self->remainingLives = 2;
+        self->remainingLives = 4;
         self->timeBetweenBullets = 1.5;
         self->IsShieldActivated = true;
         self->shieldtime = 1;
@@ -56,7 +56,7 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
         self->worldH = 120 * PIX_TO_WORLD;
         self->radius = 0.4f;
         self->texture = assets->fighter3;
-        self->remainingLives = 2;
+        self->remainingLives = 4;
         self->timeBetweenBullets = 1;
         self->IsShieldActivated = true;
         self->shieldtime = 1;
@@ -70,7 +70,7 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
         self->worldH = 240 * PIX_TO_WORLD;
         self->radius = 1.2f;
         self->texture = assets->fighter4;
-        self->remainingLives = 20;
+        self->remainingLives = 25;
         self->timeBetweenBullets = 0.15f;
         self->IsShieldActivated = true;
         self->shieldtime = 12;
@@ -85,7 +85,7 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
         self->worldH = 120 * PIX_TO_WORLD;
         self->radius = 0.4f;
         self->texture = assets->fighter5;
-        self->remainingLives = 3;
+        self->remainingLives = 8;
         self->timeBetweenBullets = 0.5;
         self->IsShieldActivated = true;
         self->shieldtime = 3;
@@ -99,7 +99,7 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
          self->worldH = 240 * PIX_TO_WORLD;
          self->radius = 1.2f;
          self->texture = assets->fighter6;
-         self->remainingLives = 30;
+         self->remainingLives = 40;
          self->timeBetweenBullets = 1.0;
         self-> lastTypeofBullet = 0;
         self->shield = 5;

@@ -8,6 +8,7 @@ Controle :
 		
 		-flèche directionelle (Déplacements)
 		-barre espace (Tir)
+		-touche P permet au joueur de devenir invincible.
 
 	-manette : 
 

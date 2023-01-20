@@ -50,6 +50,7 @@ void Menu_Render(Menu* self)
         // J'obfusque mon propre code là ( faut lire la suite en bas pour comprendre )
         int hasPlayButton = self->scene->isGameStarted ? 1 : 0;
 
+        // Choix du menu avec les touches où à la manette
         if (input->vAxis > 0)
         {
             if (self->menuKeyIndex > 0 && input->isMenuKeyBLocked == false)
@@ -147,41 +148,68 @@ void Menu_Render(Menu* self)
         self->MenuSelector.h = MenuSelectorHeight;
 
         // Si le menu est le menu de pause ( cad qu'une partie est en cours )                               ( là j'ai envie d'aller dormir, donc je fais plus d'effort ok ? )
-
         int angle = 0;
-        int selectedButton = 0;
         // Audio button
         if (self->menuKeyIndex == 0)
         {
             self->MenuSelector.x = self->MenuAudio.x + self->MenuAudio.w + 25;
             self->MenuSelector.y = self->MenuAudio.y + 15;
             angle = 180;
+
+            if (input->shootPressed)
+            {
+                MenuAudioClick(self);
+                self->menuKeyIndex = 0;
+            }
         }
         // Play/Start button
         else if (self->menuKeyIndex == 0 + hasPlayButton)
         {
-            self->MenuSelector.x = self->MenuStart.x - 65;
-            self->MenuSelector.y = self->MenuStart.y + 15;
+            self->MenuSelector.x = self->MenuStart.x - 115;
+            self->MenuSelector.y = self->MenuStart.y + 65;
+
+            if (input->shootPressed)
+            {
+                MenuStartAfterPause(self);
+                self->menuKeyIndex = 0;
+            }
         }
         // Level 1 button
         else if (self->menuKeyIndex == 1 + hasPlayButton)
         {
             self->MenuSelector.x = self->MenuLevel1.x - 65;
             self->MenuSelector.y = self->MenuLevel1.y + 15;
+
+            if (input->shootPressed)
+            {
+                MenuStartLevel1(self);
+                self->menuKeyIndex = 0;
+            }
         }
         // Level 2 button
         else if (self->menuKeyIndex == 2 + hasPlayButton)
         {
             self->MenuSelector.x = self->MenuLevel2.x - 65;
             self->MenuSelector.y = self->MenuLevel2.y + 15;
+
+            if (input->shootPressed)
+            {
+                MenuStartLevel2(self);
+                self->menuKeyIndex = 0;
+            }
         }
         // Quit button
         else if (self->menuKeyIndex == 3 + hasPlayButton)
         {
             self->MenuSelector.x = self->MenuQuit.x - 65;
             self->MenuSelector.y = self->MenuQuit.y + 50;
-        }
 
+            if (input->shootPressed)
+            {
+                MenuClickOnQuit(self);
+                self->menuKeyIndex = 0;
+            }
+        }
 
         SDL_RenderCopyEx(scene->renderer, scene->assets->MenuSelector, NULL, &self->MenuSelector, angle, NULL, 0);
     }
@@ -315,9 +343,7 @@ void mouseClickActionIntersectionMenu(int mouseX, int mouseY, Menu *self)
             mouseX,
             mouseY
         )) {
-            self->isOpen = false;
-            self->scene->isGameStarted = true;
-            Mix_PlayChannel(-1, self->scene->assets->MenuClickSound1, 0);
+            MenuStartAfterPause(self);
         }
 
         // Regarde si le bouton level 1 a été cliqué
@@ -329,11 +355,10 @@ void mouseClickActionIntersectionMenu(int mouseX, int mouseY, Menu *self)
             mouseX,
             mouseY
         )) {
-            Mix_PlayChannel(-1, self->scene->assets->MenuClickSound1, 0);
-            startSceneAtLevel(self->scene, LEVEL_1);
+            MenuStartLevel1(self);
         }
 
-        // Regarde si le bouton level 1 a été cliqué
+        // Regarde si le bouton level 2 a été cliqué
         if (isInsideRect(
             self->MenuLevel2.x,
             self->MenuLevel2.y,
@@ -342,8 +367,7 @@ void mouseClickActionIntersectionMenu(int mouseX, int mouseY, Menu *self)
             mouseX,
             mouseY
         )) {
-            Mix_PlayChannel(-1, self->scene->assets->MenuClickSound1, 0);
-            startSceneAtLevel(self->scene, LEVEL_2);
+            MenuStartLevel2(self);
         }
 
 
@@ -356,8 +380,7 @@ void mouseClickActionIntersectionMenu(int mouseX, int mouseY, Menu *self)
             mouseX,
             mouseY
         )) {
-            self->scene->input->quitPressed = true;
-            Mix_PlayChannel(-1, self->scene->assets->MenuClickSound1, 0);
+            MenuClickOnQuit(self);
         }
 
         // Regarde si le bouton Audio à été cliqué
@@ -370,18 +393,7 @@ void mouseClickActionIntersectionMenu(int mouseX, int mouseY, Menu *self)
             mouseY
         )) {
             // Si il a été cliqué alors on désactive ou active l'audio
-            self->isAudioPlaying = !self->isAudioPlaying;
-
-            if (!self->isAudioPlaying)
-            {
-                Mix_Volume(-1, 0);
-                Mix_VolumeMusic(0);
-            }
-            else {
-                Mix_Volume(-1, SOUND_VOLUME);
-                Mix_VolumeMusic(MUSIC_VOLUME);
-            }
-            Mix_PlayChannel(-1, self->scene->assets->MenuClickSound1, 0);
+            MenuAudioClick(self);
         }
     }
 
@@ -396,11 +408,7 @@ void mouseClickActionIntersectionMenu(int mouseX, int mouseY, Menu *self)
             mouseX,
             mouseY
         )) {
-            self->scene->player->state = PLAYER_FLYING;
-            self->scene->isGameStarted = false;
-            self->isOpen = true;
-
-            Mix_PlayChannel(-1, self->scene->assets->MenuClickSound1, 0);
+            MenuClickOnGameOverRestart(self);
         }
         // Regarde si le bouton Quitter à été cliqué
         else if (isInsideRect(
@@ -410,9 +418,58 @@ void mouseClickActionIntersectionMenu(int mouseX, int mouseY, Menu *self)
             self->MenuQuit.h,
             mouseX,
             mouseY
-        )) {
-            self->scene->input->quitPressed = true;
-            Mix_PlayChannel(-1, self->scene->assets->MenuClickSound1, 0);
-        }
+        ))
+            MenuClickOnQuit(self);
     }
+}
+
+void MenuClickOnGameOverRestart(Menu* self)
+{
+    self->scene->player->state = PLAYER_FLYING;
+    self->scene->isGameStarted = false;
+    self->isOpen = true;
+
+    Mix_PlayChannel(-1, self->scene->assets->MenuClickSound1, 0);
+}
+
+void MenuClickOnQuit(Menu* self)
+{
+    self->scene->input->quitPressed = true;
+    Mix_PlayChannel(-1, self->scene->assets->MenuClickSound1, 0);
+    exit(0);
+}
+
+void MenuAudioClick(Menu* self)
+{
+    self->isAudioPlaying = !self->isAudioPlaying;
+
+    if (!self->isAudioPlaying)
+    {
+        Mix_Volume(-1, 0);
+        Mix_VolumeMusic(0);
+    }
+    else {
+        Mix_Volume(-1, SOUND_VOLUME);
+        Mix_VolumeMusic(MUSIC_VOLUME);
+    }
+    Mix_PlayChannel(-1, self->scene->assets->MenuClickSound1, 0);
+}
+
+void MenuStartLevel1(Menu* self)
+{
+    Mix_PlayChannel(-1, self->scene->assets->MenuClickSound1, 0);
+    startSceneAtLevel(self->scene, LEVEL_1);
+}
+
+void MenuStartLevel2(Menu* self)
+{
+    Mix_PlayChannel(-1, self->scene->assets->MenuClickSound1, 0);
+    startSceneAtLevel(self->scene, LEVEL_2);
+}
+
+void MenuStartAfterPause(Menu* self)
+{
+    self->isOpen = false;
+    self->scene->isGameStarted = true;
+    Mix_PlayChannel(-1, self->scene->assets->MenuClickSound1, 0);
 }

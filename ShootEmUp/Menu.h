@@ -62,3 +62,15 @@ int isInsideRect(int x, int y, int w, int h, int mouseX, int mouseY);
 /// @brief Regarde si un bouton du menu a été cliqué et agis en conséquence.
 /// @param mouseX,mouseY les coords de la souris, self le menu.
 void mouseClickActionIntersectionMenu(int mouseX, int mouseY, Menu* self);
+
+void MenuClickOnQuit(Menu* self);
+
+void MenuAudioClick(Menu* self);
+
+void MenuStartLevel1(Menu* self);
+
+void MenuStartLevel2(Menu* self);
+
+void MenuStartAfterPause(Menu* self);
+
+void MenuClickOnGameOverRestart(Menu* self);

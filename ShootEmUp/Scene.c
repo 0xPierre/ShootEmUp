@@ -461,6 +461,7 @@ bool Scene_Update(Scene *self)
 
     Scene_UpdateLevel(self);
 
+
     return self->input->quitPressed;
 }
 
@@ -655,17 +656,37 @@ void GameOver(Scene* self)
             self->player->state = PLAYER_DEAD;
     }
     else {
+        Input* input = self->input;
+        Menu* menu = self->menu;
+        /*
+        * Choix du menu avec les touches où à la manette
+        */
+        if (input->vAxis > 0)
+        {
+            if (menu->menuKeyIndex > 0 && input->isMenuKeyBLocked == false)
+            {
+                menu->menuKeyIndex--;
+            }
+            input->isMenuKeyBLocked = true;
+        }
+        else if (input->vAxis < 0)
+        {
+            if (menu->menuKeyIndex < 1 && input->isMenuKeyBLocked == false)
+                menu->menuKeyIndex++;
+            input->isMenuKeyBLocked = true;
+        }
+
         /*
         * Affichage du bouton Play again
         */
         int MenuPlayAgainWidth = 320;
         int MenuPlayAgainHeight = 84;
 
-        self->menu->MenuPlayAgain.x = WINDOW_WIDTH / 2 - 140;
-        self->menu->MenuPlayAgain.y = gameOver.h - 50;
-        self->menu->MenuPlayAgain.w = MenuPlayAgainWidth;
-        self->menu->MenuPlayAgain.h = MenuPlayAgainHeight;
-        SDL_RenderCopy(self->renderer, assets->MenuPlayAgain, NULL, &self->menu->MenuPlayAgain);
+        menu->MenuPlayAgain.x = WINDOW_WIDTH / 2 - 140;
+        menu->MenuPlayAgain.y = gameOver.h - 50;
+        menu->MenuPlayAgain.w = MenuPlayAgainWidth;
+        menu->MenuPlayAgain.h = MenuPlayAgainHeight;
+        SDL_RenderCopy(self->renderer, assets->MenuPlayAgain, NULL, &menu->MenuPlayAgain);
 
         /*
         * Affichage du bouton Quitter
@@ -673,11 +694,43 @@ void GameOver(Scene* self)
         int MenuQuitWidth = 287;
         int MenuQuitHeight = 150;
 
-        self->menu->MenuQuit.x = WINDOW_WIDTH / 2 - MenuQuitWidth / 2 - 10;
-        self->menu->MenuQuit.y = self->menu->MenuPlayAgain.y + self->menu->MenuPlayAgain.h + 20;
-        self->menu->MenuQuit.w = MenuQuitWidth;
-        self->menu->MenuQuit.h = MenuQuitHeight;
-        SDL_RenderCopy(self->renderer, assets->MenuQuit, NULL, &self->menu->MenuQuit);
+        menu->MenuQuit.x = WINDOW_WIDTH / 2 - MenuQuitWidth / 2 - 10;
+        menu->MenuQuit.y = menu->MenuPlayAgain.y + menu->MenuPlayAgain.h + 20;
+        menu->MenuQuit.w = MenuQuitWidth;
+        menu->MenuQuit.h = MenuQuitHeight;
+        SDL_RenderCopy(self->renderer, assets->MenuQuit, NULL, &menu->MenuQuit);
+
+        /*
+        * Affichage du sélecteur
+        */
+        int MenuSelectorWidth = 40;
+        int MenuSelectorHeight = 48;
+
+        menu->MenuSelector.w = MenuSelectorWidth;
+        menu->MenuSelector.h = MenuSelectorHeight;
+
+        if (menu->menuKeyIndex == 0)
+        {
+            
+            menu->MenuSelector.x = menu->MenuPlayAgain.x - 80;
+            menu->MenuSelector.y = menu->MenuPlayAgain.y + 15;
+
+            if (input->shootPressed)
+            {
+                MenuClickOnGameOverRestart(menu);
+            }
+        }
+        else {
+            menu->MenuSelector.x = menu->MenuQuit.x - 65;
+            menu->MenuSelector.y = menu->MenuQuit.y + 35;
+
+            if (input->shootPressed)
+            {
+                MenuClickOnQuit(menu);
+            }
+        }
+
+        SDL_RenderCopyEx(self->renderer, self->assets->MenuSelector, NULL, &menu->MenuSelector, 0, NULL, 0);
     }
 
 

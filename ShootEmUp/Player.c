@@ -221,6 +221,7 @@ void Player_Damage(Player *self, int damage)
         {
             self->state = PLAYER_DYING;
             self->isDyingSince = g_time->currentTime;
+            Mix_PlayChannel(-1, self->scene->assets->PlayerDeath, 0);
         }
         // Le joueur reçoit un bouclier seulement si il n'est pas déjà sous bouclier
         else if (!self->isShieldActivated)

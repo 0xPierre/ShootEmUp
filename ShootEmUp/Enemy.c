@@ -70,7 +70,7 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
         self->worldH = 240 * PIX_TO_WORLD;
         self->radius = 1.2f;
         self->texture = assets->fighter4;
-        self->remainingLives = 10;
+        self->remainingLives = 20;
         self->timeBetweenBullets = 0.15f;
         self->IsShieldActivated = true;
         self->shieldtime = 12;
@@ -99,7 +99,7 @@ Enemy *Enemy_New(Scene *scene, int type, Vec2 position)
          self->worldH = 240 * PIX_TO_WORLD;
          self->radius = 1.2f;
          self->texture = assets->fighter6;
-         self->remainingLives = 15;
+         self->remainingLives = 30;
          self->timeBetweenBullets = 1.0;
         self-> lastTypeofBullet = 0;
         self->shield = 5;
@@ -411,6 +411,7 @@ void Enemy_Damage(Enemy *self, int damage)
 
         if (self->remainingLives == 0) {
             self->state = ENEMY_DEAD;
+            Mix_PlayChannel(-1, self->scene->assets->EnemyDeath, 0);
         }
     }
     

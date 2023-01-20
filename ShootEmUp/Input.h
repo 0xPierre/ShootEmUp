@@ -35,6 +35,9 @@ typedef struct Input_s
     /// Une valeur positive désigne un déplacement vers le haut.
     float vAxis;
 
+    /// @brief Si l'état est true, alors il faut que la touche repasse en keyup ou en 0 ( manette ) pour pouvoir etre renvoyé, vzy je sais c pas clair mais il est 1h du mat et c'est à rendre tout à l'heure, je veux aller dormir et plus sûr on va avoir eval surprise d'analyse jvais avoir 3
+    bool isMenuKeyBLocked;
+
     SDL_Joystick* gameController;
 } Input;
 

@@ -12,6 +12,7 @@ Input *Input_New(Scene *scene)
 
     self->scene = scene;
     self->gameController = NULL;
+    self->isMenuKeyBLocked = false;
 
     // Regarde si il existe un joystick
     if (SDL_NumJoysticks() < 1)
@@ -97,6 +98,11 @@ void Input_Update(Input *self)
                 self->shootPressed = true;
                 break;
 
+            case SDL_SCANCODE_RETURN:
+                // Tir du joueur 
+                self->shootPressed = true;
+                break;
+
             default:
                 break;
             }
@@ -124,12 +130,14 @@ void Input_Update(Input *self)
                 // Deplacement en haut
                 if (self->vAxis > 0.f)
                     self->vAxis = 0.f;
+                  self->isMenuKeyBLocked = false;
                 break;
 
             case SDL_SCANCODE_DOWN:
                 // Deplacement en bas
                 if (self->vAxis < 0.f)
                     self->vAxis = 0.f;
+                self->isMenuKeyBLocked = false;
                 break;
 
             default:
@@ -159,6 +167,7 @@ void Input_Update(Input *self)
                     }
                     else {
                         self->hAxis = 0.f;
+                        self->isMenuKeyBLocked = false;
                     }
                 }
                 if (evt.jaxis.axis == 1)
@@ -173,6 +182,7 @@ void Input_Update(Input *self)
                     }
                     else {
                         self->vAxis = 0.f;
+                        self->isMenuKeyBLocked = false;
                     }
                 }
             }

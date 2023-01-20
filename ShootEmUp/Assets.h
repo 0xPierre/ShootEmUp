@@ -59,6 +59,7 @@ typedef struct Assets_s
     SDL_Texture* MenuLevel1;
     SDL_Texture* MenuLevel2;
     SDL_Texture* MenuPlayAgain;
+    SDL_Texture* MenuSelector;
 
     SDL_Texture* CollectableHealth;
     SDL_Texture* CollectableSpeed;

@@ -20,6 +20,7 @@ typedef struct Menu_s
     SDL_Rect MenuLevel1;
     SDL_Rect MenuLevel2;
     SDL_Rect MenuPlayAgain;
+    SDL_Rect MenuSelector;
 
     /// @brief État de si la musique/les bruits se joue
     bool isAudioPlaying;
@@ -27,6 +28,9 @@ typedef struct Menu_s
     ///@brief Stocke le curseur par défault du joueur
     SDL_Cursor* cursor_default;
     SDL_Cursor* cursor_pointer;
+
+    /// @brief Stocke l'index de la sélection clavier/manette du menu
+    int menuKeyIndex;
 } Menu;
 
 /// @brief Créé le menu

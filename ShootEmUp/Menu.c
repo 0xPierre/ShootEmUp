@@ -14,6 +14,8 @@ Menu* Menu_New(Scene *scene)
     self->cursor_default = SDL_GetCursor();
     self->cursor_pointer = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND);
 
+    self->menuKeyIndex = 1;
+
     return self;
 }
 
@@ -45,6 +47,24 @@ void Menu_Render(Menu* self)
     // Affichage du menu
     if (self->isOpen)
     {
+        // J'obfusque mon propre code là ( faut lire la suite en bas pour comprendre )
+        int hasPlayButton = self->scene->isGameStarted ? 1 : 0;
+
+        if (input->vAxis > 0)
+        {
+            if (self->menuKeyIndex > 0 && input->isMenuKeyBLocked == false)
+            {
+                self->menuKeyIndex--;
+            }
+            input->isMenuKeyBLocked = true;
+        }
+        else if (input->vAxis < 0)
+        {
+            if (self->menuKeyIndex < (3 + hasPlayButton) && input->isMenuKeyBLocked == false)
+                self->menuKeyIndex++;
+            input->isMenuKeyBLocked = true;
+        }
+
         /*
         * Affichage du bouton Jouer seulement si la partie a déjà commencé
         */
@@ -116,6 +136,54 @@ void Menu_Render(Menu* self)
             self->isAudioPlaying ? scene->assets->MenuSoundOn : scene->assets->MenuSoundOff,
             NULL, &self->MenuAudio
        );
+
+        /*
+        * Affichage du sélecteur
+        */
+        int MenuSelectorWidth = 40;
+        int MenuSelectorHeight = 48;
+        
+        self->MenuSelector.w = MenuSelectorWidth;
+        self->MenuSelector.h = MenuSelectorHeight;
+
+        // Si le menu est le menu de pause ( cad qu'une partie est en cours )                               ( là j'ai envie d'aller dormir, donc je fais plus d'effort ok ? )
+
+        int angle = 0;
+        int selectedButton = 0;
+        // Audio button
+        if (self->menuKeyIndex == 0)
+        {
+            self->MenuSelector.x = self->MenuAudio.x + self->MenuAudio.w + 25;
+            self->MenuSelector.y = self->MenuAudio.y + 15;
+            angle = 180;
+        }
+        // Play/Start button
+        else if (self->menuKeyIndex == 0 + hasPlayButton)
+        {
+            self->MenuSelector.x = self->MenuStart.x - 65;
+            self->MenuSelector.y = self->MenuStart.y + 15;
+        }
+        // Level 1 button
+        else if (self->menuKeyIndex == 1 + hasPlayButton)
+        {
+            self->MenuSelector.x = self->MenuLevel1.x - 65;
+            self->MenuSelector.y = self->MenuLevel1.y + 15;
+        }
+        // Level 2 button
+        else if (self->menuKeyIndex == 2 + hasPlayButton)
+        {
+            self->MenuSelector.x = self->MenuLevel2.x - 65;
+            self->MenuSelector.y = self->MenuLevel2.y + 15;
+        }
+        // Quit button
+        else if (self->menuKeyIndex == 3 + hasPlayButton)
+        {
+            self->MenuSelector.x = self->MenuQuit.x - 65;
+            self->MenuSelector.y = self->MenuQuit.y + 50;
+        }
+
+
+        SDL_RenderCopyEx(scene->renderer, scene->assets->MenuSelector, NULL, &self->MenuSelector, angle, NULL, 0);
     }
     changeCursor(self);
 }

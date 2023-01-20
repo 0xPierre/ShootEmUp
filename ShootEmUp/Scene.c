@@ -283,7 +283,7 @@ void startSceneAtLevel(Scene* self, Levels level)
     switch (level)
     {
     case LEVEL_1:
-        self->waveIdx = 0;
+        self->waveIdx = 4;
         break;
     case LEVEL_2:
         self->waveIdx = 5;

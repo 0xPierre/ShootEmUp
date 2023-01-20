@@ -428,6 +428,8 @@ void MenuClickOnGameOverRestart(Menu* self)
     self->scene->player->state = PLAYER_FLYING;
     self->scene->isGameStarted = false;
     self->isOpen = true;
+    self->scene->input->shootPressed = false;
+    self->scene->isGameWin = false;
 
     Mix_PlayChannel(-1, self->scene->assets->MenuClickSound1, 0);
 }

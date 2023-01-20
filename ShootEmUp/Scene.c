@@ -23,6 +23,9 @@ Scene *Scene_New(SDL_Renderer *renderer)
     self->defaultGameOverPosY = 200;
     self->gameOverPosY = self->defaultGameOverPosY;
 
+    self->defaultWinPosY = 200.f;
+    self->winPosY = self->defaultWinPosY;
+
     self->layer1PosX = 0;
     self->layer2PosX = 0;
 
@@ -146,7 +149,13 @@ void Scene_UpdateLevel(Scene *self)
 
         self->waveIdx++;
     }
+    // Si la vague est 5 alors c'est win
     else if (self->waveIdx == 5)
+    {
+        self->isGameWin = true;
+        return;
+    }
+    else if (self->waveIdx == 6)
     {
         Enemy* enemy_1 = Enemy_New(self, ENEMY_FIGHTER_5, Vec2_Set(13.0f, 5.0f));
         Scene_AppendEnemy(self, enemy_1);
@@ -162,7 +171,7 @@ void Scene_UpdateLevel(Scene *self)
 
         self->waveIdx++;
     }
-    else if (self->waveIdx == 6)
+    else if (self->waveIdx == 7)
     {
         Enemy* enemy_1 = Enemy_New(self, ENEMY_FIGHTER_3, Vec2_Set(13.0f, 4.5f));
         Scene_AppendEnemy(self, enemy_1);
@@ -181,7 +190,7 @@ void Scene_UpdateLevel(Scene *self)
 
         self->waveIdx++;
     }
-    else if (self->waveIdx == 7)
+    else if (self->waveIdx == 8)
     {
         Enemy* enemy_1 = Enemy_New(self, ENEMY_FIGHTER_1, Vec2_Set(11.5f, 3.0f));
         Scene_AppendEnemy(self, enemy_1);
@@ -203,7 +212,7 @@ void Scene_UpdateLevel(Scene *self)
 
         self->waveIdx++;
     }
-    else if (self->waveIdx == 8)
+    else if (self->waveIdx == 9)
     {
         Enemy* enemy_1 = Enemy_New(self, ENEMY_FIGHTER_5, Vec2_Set(11.5f, 3.0f));
         Scene_AppendEnemy(self, enemy_1);
@@ -228,7 +237,7 @@ void Scene_UpdateLevel(Scene *self)
 
         self->waveIdx++;
     }
-    else if (self->waveIdx == 9)
+    else if (self->waveIdx == 10)
     {
         Enemy* enemy_1 = Enemy_New(self, ENEMY_FIGHTER_6, Vec2_Set(13.0f, 4.5f));
         Scene_AppendEnemy(self, enemy_1);
@@ -240,6 +249,12 @@ void Scene_UpdateLevel(Scene *self)
         Scene_AppendEnemy(self, enemy_5);
 
         self->waveIdx++;
+    }
+    // Si la vague est 11 alors c'est win
+    else if (self->waveIdx == 11)
+    {
+        self->isGameWin = true;
+        return;
     }
 }
 
@@ -279,14 +294,17 @@ void startSceneAtLevel(Scene* self, Levels level)
     self->lastCollectableTime = g_time->currentTime;
     self->collectablesCount = 0;
     self->gameOverPosY = self->defaultGameOverPosY;
+    self->isGameWin = false;
+
+    self->winPosY = self->defaultWinPosY;
 
     switch (level)
     {
     case LEVEL_1:
-        self->waveIdx = 4;
+        self->waveIdx = 0;
         break;
     case LEVEL_2:
-        self->waveIdx = 5;
+        self->waveIdx = 6;
         break;
     }
     
@@ -511,8 +529,14 @@ void Scene_Render(Scene *self)
     }
 
     // Affichage du GameOver
-    if (self->player->state == PLAYER_DYING || self->player->state == PLAYER_DEAD)
+    if (self->player->state == PLAYER_DYING || self->player->state == PLAYER_DEAD && !self->isGameWin)
         GameOver(self);
+
+    // Affichage du Win
+    if (self->isGameWin)
+    {
+        Win(self);
+    }
 
     Menu_Render(self->menu);
 }
@@ -633,6 +657,85 @@ void BackGroundLayers_Render(Scene* self)
     SDL_RenderCopy(renderer, assets->layer2, NULL, &layer2);
 }
 
+void renderRetryMenu(Scene* self, SDL_Rect dst)
+{
+    Input* input = self->input;
+    Menu* menu = self->menu;
+    /*
+    * Choix du menu avec les touches où à la manette
+    */
+    if (input->vAxis > 0)
+    {
+        if (menu->menuKeyIndex > 0 && input->isMenuKeyBLocked == false)
+        {
+            menu->menuKeyIndex--;
+        }
+        input->isMenuKeyBLocked = true;
+    }
+    else if (input->vAxis < 0)
+    {
+        if (menu->menuKeyIndex < 1 && input->isMenuKeyBLocked == false)
+            menu->menuKeyIndex++;
+        input->isMenuKeyBLocked = true;
+    }
+
+    /*
+    * Affichage du bouton Play again
+    */
+    int MenuPlayAgainWidth = 320;
+    int MenuPlayAgainHeight = 84;
+
+    menu->MenuPlayAgain.x = WINDOW_WIDTH / 2 - 140;
+    menu->MenuPlayAgain.y = dst.h - 50;
+    menu->MenuPlayAgain.w = MenuPlayAgainWidth;
+    menu->MenuPlayAgain.h = MenuPlayAgainHeight;
+    SDL_RenderCopy(self->renderer, self->assets->MenuPlayAgain, NULL, &menu->MenuPlayAgain);
+
+    /*
+    * Affichage du bouton Quitter
+    */
+    int MenuQuitWidth = 287;
+    int MenuQuitHeight = 150;
+
+    menu->MenuQuit.x = WINDOW_WIDTH / 2 - MenuQuitWidth / 2 - 10;
+    menu->MenuQuit.y = menu->MenuPlayAgain.y + menu->MenuPlayAgain.h + 20;
+    menu->MenuQuit.w = MenuQuitWidth;
+    menu->MenuQuit.h = MenuQuitHeight;
+    SDL_RenderCopy(self->renderer, self->assets->MenuQuit, NULL, &menu->MenuQuit);
+
+    /*
+    * Affichage du sélecteur
+    */
+    int MenuSelectorWidth = 40;
+    int MenuSelectorHeight = 48;
+
+    menu->MenuSelector.w = MenuSelectorWidth;
+    menu->MenuSelector.h = MenuSelectorHeight;
+
+    if (menu->menuKeyIndex == 0)
+    {
+
+        menu->MenuSelector.x = menu->MenuPlayAgain.x - 80;
+        menu->MenuSelector.y = menu->MenuPlayAgain.y + 15;
+
+        if (input->shootPressed)
+        {
+            MenuClickOnGameOverRestart(menu);
+        }
+    }
+    else {
+        menu->MenuSelector.x = menu->MenuQuit.x - 65;
+        menu->MenuSelector.y = menu->MenuQuit.y + 35;
+
+        if (input->shootPressed)
+        {
+            MenuClickOnQuit(menu);
+        }
+    }
+
+    SDL_RenderCopyEx(self->renderer, self->assets->MenuSelector, NULL, &menu->MenuSelector, 0, NULL, 0);
+}
+
 void GameOver(Scene* self)
 {
     SDL_Renderer* renderer = Scene_GetRenderer(self);
@@ -656,83 +759,38 @@ void GameOver(Scene* self)
             self->player->state = PLAYER_DEAD;
     }
     else {
-        Input* input = self->input;
-        Menu* menu = self->menu;
-        /*
-        * Choix du menu avec les touches où à la manette
-        */
-        if (input->vAxis > 0)
-        {
-            if (menu->menuKeyIndex > 0 && input->isMenuKeyBLocked == false)
-            {
-                menu->menuKeyIndex--;
-            }
-            input->isMenuKeyBLocked = true;
-        }
-        else if (input->vAxis < 0)
-        {
-            if (menu->menuKeyIndex < 1 && input->isMenuKeyBLocked == false)
-                menu->menuKeyIndex++;
-            input->isMenuKeyBLocked = true;
-        }
-
-        /*
-        * Affichage du bouton Play again
-        */
-        int MenuPlayAgainWidth = 320;
-        int MenuPlayAgainHeight = 84;
-
-        menu->MenuPlayAgain.x = WINDOW_WIDTH / 2 - 140;
-        menu->MenuPlayAgain.y = gameOver.h - 50;
-        menu->MenuPlayAgain.w = MenuPlayAgainWidth;
-        menu->MenuPlayAgain.h = MenuPlayAgainHeight;
-        SDL_RenderCopy(self->renderer, assets->MenuPlayAgain, NULL, &menu->MenuPlayAgain);
-
-        /*
-        * Affichage du bouton Quitter
-        */
-        int MenuQuitWidth = 287;
-        int MenuQuitHeight = 150;
-
-        menu->MenuQuit.x = WINDOW_WIDTH / 2 - MenuQuitWidth / 2 - 10;
-        menu->MenuQuit.y = menu->MenuPlayAgain.y + menu->MenuPlayAgain.h + 20;
-        menu->MenuQuit.w = MenuQuitWidth;
-        menu->MenuQuit.h = MenuQuitHeight;
-        SDL_RenderCopy(self->renderer, assets->MenuQuit, NULL, &menu->MenuQuit);
-
-        /*
-        * Affichage du sélecteur
-        */
-        int MenuSelectorWidth = 40;
-        int MenuSelectorHeight = 48;
-
-        menu->MenuSelector.w = MenuSelectorWidth;
-        menu->MenuSelector.h = MenuSelectorHeight;
-
-        if (menu->menuKeyIndex == 0)
-        {
-            
-            menu->MenuSelector.x = menu->MenuPlayAgain.x - 80;
-            menu->MenuSelector.y = menu->MenuPlayAgain.y + 15;
-
-            if (input->shootPressed)
-            {
-                MenuClickOnGameOverRestart(menu);
-            }
-        }
-        else {
-            menu->MenuSelector.x = menu->MenuQuit.x - 65;
-            menu->MenuSelector.y = menu->MenuQuit.y + 35;
-
-            if (input->shootPressed)
-            {
-                MenuClickOnQuit(menu);
-            }
-        }
-
-        SDL_RenderCopyEx(self->renderer, self->assets->MenuSelector, NULL, &menu->MenuSelector, 0, NULL, 0);
+        renderRetryMenu(self, gameOver);
     }
 
 
     SDL_RenderCopy(renderer, assets->GameOver, NULL, &gameOver);
+}
+
+
+void Win(Scene* self)
+{
+    SDL_Renderer* renderer = Scene_GetRenderer(self);
+    Assets* assets = Scene_GetAssets(self);
+    SDL_Rect winRect = { 0 };
+    // Taille du GameOver
+    winRect.w = 612;
+    winRect.h = 344;
+
+    winRect.x = WINDOW_WIDTH / 2 - winRect.w / 2;
+    
+    // Pour me simplifier la tâche ( je le fais bcp ça depuis que j'ai passé les 1h du matin ce vendredi ). Lorsque le player gagne il est passé en mort comment ça je peux réutiliser mon code.
+    if (self->player->state != PLAYER_DEAD)
+    {
+        self->winPosY = self->winPosY - Timer_GetDelta(g_time) * 400.f;
+
+        if ((int)self->winPosY > 0)
+            winRect.y = (int)self->winPosY;
+        else
+            self->player->state = PLAYER_DEAD;
+    }
+    else {
+        renderRetryMenu(self, winRect);
+    }
+
+    SDL_RenderCopy(renderer, assets->Win, NULL, &winRect);
 }

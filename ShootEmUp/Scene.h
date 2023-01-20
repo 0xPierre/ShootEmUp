@@ -59,10 +59,15 @@ typedef struct Scene_s
     /// @brief Indice de la vague d'ennemis courrante.
     /// Utilisé pour implémenter un niveau complet.
     int waveIdx;
+    /// @brief Permet de savoir si il a fait une vague avant
+    int oldWaveIdx;
 
     /// @brief Permet de savoir si le joueur était en jeu
     /// Utilisé pour savoir si afficher Jouer ou Reprendre
     int isGameStarted;
+
+    /// @brief Permet de savoir si le joueur a gagné
+    bool isGameWin;
     
     /// @brief Menu principal
     Menu* menu;
@@ -90,6 +95,11 @@ typedef struct Scene_s
     float gameOverPosY;
     /// @brief Position par défault Y du GameOver label
     float defaultGameOverPosY;
+
+    /// @brief Position Y du GameOver label permettant son animation vers Y = 0
+    float winPosY;
+    /// @brief Position par défault Y du GameOver label
+    float defaultWinPosY;
 
 } Scene;
 
@@ -149,6 +159,10 @@ void startSceneAtLevel(Scene* self, Levels level);
 /// @brief Gère le Game Over d'un niveau.
 /// @param self la scène.
 void GameOver(Scene* self);
+
+/// @brief Gère l'écran de Win d'un niveau
+/// @param self la scène
+void Win(Scene* self);
 
 /// @brief Renvoie le moteur de rendu de la scène.
 /// @param self la scène.

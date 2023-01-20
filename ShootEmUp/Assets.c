@@ -95,6 +95,7 @@ Assets *Assets_New(SDL_Renderer *renderer)
         { &self->ShieldEnnemy, "../Assets/Enemy/SHIELDE.png"                    },
         { &self->ShieldPlayer, "../Assets/Player/SHIELDP.png"                   },
         { &self->GameOver, "../Assets/Background/GameOver.png"                  },
+        { &self->Win, "../Assets/Background/win.png"                            },
     }; 
     int texSpecCount = sizeof(texSpecs) / sizeof(TextureSpec);
 
@@ -177,6 +178,8 @@ void Assets_Delete(Assets *self)
         &self->Speed00PowerUpBar,
         &self->ShieldEnnemy,
         &self->ShieldPlayer,
+        &self->GameOver,
+        &self->Win,
     };
     int count = sizeof(texPointers) / sizeof(SDL_Texture **);
 

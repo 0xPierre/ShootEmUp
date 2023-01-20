@@ -18,6 +18,9 @@ typedef struct Assets_s
     // Texture de GameOver
     SDL_Texture* GameOver;
 
+    //Texture de Win
+    SDL_Texture* Win;
+
     //texture des coeurs
     SDL_Texture* playerHeart;
 

@@ -276,14 +276,12 @@ void Enemy_Update(Enemy *self)
             {
                 self->shield = 0;
                 self->IsShieldActivated = true;
-                printf("shield on\n");
                 self->shieldtime = 5;
                 
             }
             if (self->shieldtime > 0) self->shieldtime--;
             if (self->shieldtime == 0)
             {
-                printf("shield off\n");
                 self->IsShieldActivated = false;
                 
             }

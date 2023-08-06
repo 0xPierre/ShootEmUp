@@ -1,6 +1,14 @@
 # ShootEmUp
 
-                          
+ShootEmUp is ShootThem'up game made in 4 days in a school rush ([ESIEA](https://esiea.fr)). Our goal was to make the more advanced game within the limited time.
+
+
+https://github.com/0xPierre/ShootEmUp/assets/64857347/17b2b1a7-0b16-48c8-9ece-9235f3934951
+
+
+## Demo
+
+# Readme for School :
 
 ## Contrôles
 

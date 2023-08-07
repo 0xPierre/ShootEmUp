@@ -1,6 +1,6 @@
 # ShootEmUp
 
-ShootEmUp is ShootThem'up game made in 4 days in a school rush ([ESIEA](https://esiea.fr)). Our goal was to make the more advanced game within the limited time.
+ShootEmUp is a ShootThem'up game made in 4 days in a school rush ([ESIEA](https://esiea.fr)). Our goal was to make the more advanced game within the limited time.
 
 
 ## Demo
